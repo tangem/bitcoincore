@@ -1,0 +1,48 @@
+PODS:
+  - Alamofire (5.2.2)
+  - BigInt (5.2.0)
+  - GRDB.swift (4.14.0):
+    - GRDB.swift/standard (= 4.14.0)
+  - GRDB.swift/standard (4.14.0)
+  - HsToolKit.swift (1.1.0):
+    - Alamofire (~> 5.0)
+    - ObjectMapper (~> 3.0)
+    - RxSwift (~> 5.0)
+  - ObjectMapper (3.5.3)
+  - OpenSslKit.swift (1.2.2)
+  - RxSwift (5.1.1)
+  - Secp256k1Kit.swift (1.1)
+
+DEPENDENCIES:
+  - BigInt (~> 5.0)
+  - GRDB.swift (~> 4.0)
+  - HsToolKit.swift (~> 1.1.0)
+  - ObjectMapper (~> 3.0)
+  - OpenSslKit.swift
+  - RxSwift (~> 5.0)
+  - Secp256k1Kit.swift
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - BigInt
+    - GRDB.swift
+    - HsToolKit.swift
+    - ObjectMapper
+    - OpenSslKit.swift
+    - RxSwift
+    - Secp256k1Kit.swift
+
+SPEC CHECKSUMS:
+  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  BigInt: f668a80089607f521586bbe29513d708491ef2f7
+  GRDB.swift: 8cc3ab7c8b8b4ac1761deb8dca4b51c1c9d429f8
+  HsToolKit.swift: d47ef3e8c507a6e980f2f6d819c5b0cf05845910
+  ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
+  OpenSslKit.swift: 0e2194853fd9ce42006cf18c89743331406a10a9
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+  Secp256k1Kit.swift: 322a66c4b3e95e96a397d73d45ad4d79af991bab
+
+PODFILE CHECKSUM: 6b258493493985bed785ec547fb166a0f999810f
+
+COCOAPODS: 1.10.0

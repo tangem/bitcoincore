@@ -1,0 +1,197 @@
+//
+//  BitcoinCore.swift
+//  BitcoinCore
+//
+//  Created by Alexander Osokin on 04.12.2020.
+//
+
+import Foundation
+import HsToolKit
+import Secp256k1Kit
+
+public class BitcoinManager {
+    private let kit: AbstractKit
+    private let coinRate: Decimal = pow(10, 8)
+    private let walletPublicKey: Data
+    private let compressedWalletPublicKey: Data
+    
+    public init(networkParams: INetwork, walletPublicKey: Data, compressedWalletPublicKey: Data, bip: Bip = .bip84) {
+        self.walletPublicKey = walletPublicKey
+        self.compressedWalletPublicKey = compressedWalletPublicKey
+        let key = bip == .bip44 ? walletPublicKey : compressedWalletPublicKey
+        let logger = Logger(minLogLevel: .verbose)
+        kit  = try! BitcoinKit(withPubKey: key,
+                               bip: bip,
+                               walletId: "defaultWalletId",
+                               syncMode: .full,
+                               networkParams: networkParams,
+                               confirmationsThreshold: 1,
+                               logger: logger)
+    }
+    
+    public func fillBlockchainData(unspentOutputs: [UtxoDTO]) {
+        let utxos: [UnspentOutput] = unspentOutputs.map {
+            let output = Output(withValue: $0.value, index: $0.index, lockingScript: $0.script, transactionHash: $0.hash)
+            TransactionOutputExtractor.processOutput(output)
+            let tx = Transaction()
+            
+            let pubKey: PublicKey
+            switch output.scriptType {
+            case .p2pkh:
+                pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: walletPublicKey)
+            case .p2wpkh:
+                pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedWalletPublicKey)
+            default:
+                fatalError("Unsupported output script")
+            }
+            return UnspentOutput(output: output, publicKey: pubKey , transaction: tx)
+        }
+      
+        kit.setUnspents(utxos)
+    }
+    
+    public func buildForSign(target: String, amount: Decimal, feeRate: Int) throws -> [Data] {
+        let amount = convertToSatoshi(value: amount)
+        return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: .none)
+    }
+    
+    public func buildForSend(target: String, amount: Decimal, feeRate: Int, derSignatures: [Data]) throws -> Data {
+        let amount = convertToSatoshi(value: amount)
+        return try kit.createRawTransaction(to: target, value: amount, feeRate: feeRate, sortType: .none, signatures: derSignatures)
+    }
+    
+    public func fee(for value: Decimal, address: String?, feeRate: Int, senderPay: Bool) -> Decimal {
+        do {
+            let amount = convertToSatoshi(value: value)
+            let fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay)
+            return Decimal(fee) / coinRate
+        } catch {
+            print(error)
+            return 0
+        }
+    }
+    
+    public func receiveAddress(for scriptType: ScriptType) -> String {
+        kit.receiveAddress(for: scriptType)
+    }
+    
+    private func convertToSatoshi(value: Decimal) -> Int {
+        let coinValue: Decimal = value * coinRate
+
+        let handler = NSDecimalNumberHandler(roundingMode: .plain, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
+        return NSDecimalNumber(decimal: coinValue).rounding(accordingToBehavior: handler).intValue
+    }
+}
+
+
+public class SimplePublicKeyManager: IPublicKeyManager {
+    private let pubKey: PublicKey
+    private let restoreKeyConverter: IRestoreKeyConverter
+    weak var bloomFilterManager: IBloomFilterManager?
+
+    public init (compressedPublicKey: Data, restoreKeyConverter: IRestoreKeyConverter) {
+        pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedPublicKey)
+        self.restoreKeyConverter = restoreKeyConverter
+    }
+    
+    public func changePublicKey() throws -> PublicKey {
+        return pubKey
+    }
+    
+    public func receivePublicKey() throws -> PublicKey {
+        return pubKey
+    }
+    
+    public func fillGap() throws {
+        fatalError("unsupported")
+    }
+    
+    public func addKeys(keys: [PublicKey]) {
+        fatalError("unsupported")
+    }
+    
+    public func gapShifts() -> Bool {
+        fatalError("unsupported")
+    }
+    
+    public func publicKey(byPath: String) throws -> PublicKey {
+        return pubKey
+    }
+}
+
+extension SimplePublicKeyManager: IBloomFilterProvider {
+    func filterElements() -> [Data] {
+        var elements = [Data]()
+        elements.append(contentsOf: restoreKeyConverter.bloomFilterElements(publicKey: pubKey))
+        return elements
+    }
+
+}
+
+
+class SimpleUnspentOutputProvider {
+    let pluginManager: IPluginManager
+
+    private var confirmedUtxo: [UnspentOutput] = []
+    
+    private var unspendableUtxo: [UnspentOutput] {
+        confirmedUtxo.filter { !pluginManager.isSpendable(unspentOutput: $0) }
+    }
+
+    init(pluginManager: IPluginManager) {
+        self.pluginManager = pluginManager
+    }
+}
+
+extension SimpleUnspentOutputProvider: IUnspentOutputProvider {
+
+    var spendableUtxo: [UnspentOutput] {
+        confirmedUtxo.filter { pluginManager.isSpendable(unspentOutput: $0) }
+    }
+
+}
+
+extension SimpleUnspentOutputProvider: IBalanceProvider {
+
+    var balanceInfo: BalanceInfo {
+        let spendable =  spendableUtxo.map { $0.output.value }.reduce(0, +)
+        let unspendable = unspendableUtxo.map { $0.output.value }.reduce(0, +)
+
+        return BalanceInfo(spendable: spendable, unspendable: unspendable)
+    }
+}
+
+extension SimpleUnspentOutputProvider: IUnspentOutputsSetter {
+    func setSpendableUtxos(_ utxos: [UnspentOutput]) {
+        confirmedUtxo = utxos
+    }
+}
+
+
+public struct UtxoDTO {
+    public let hash: Data
+    public let index: Int
+    public let value: Int
+    public let script: Data
+    
+    public init(hash: Data, index: Int, value: Int, script: Data) {
+        self.hash = hash
+        self.index = index
+        self.value = value
+        self.script = script
+    }
+}
+
+public enum BitcoinNetwork {
+    case mainnet
+    case testnet
+    
+    public var networkParams: INetwork {
+        switch self {
+        case .mainnet:
+            return MainNet()
+        case .testnet:
+            return TestNet()
+        }
+    }
+}
