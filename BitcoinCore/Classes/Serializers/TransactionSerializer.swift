@@ -72,6 +72,7 @@ public class TransactionSerializer {
         } else {
             data += UInt32(transaction.version)
             data += VarInt(inputsToSign.count).serialized()
+			
             data += try inputsToSign.enumerated().flatMap { index, input in
                 try TransactionInputSerializer.serializedForSignature(inputToSign: input, forCurrentInputSignature: inputIndex == index)
             }

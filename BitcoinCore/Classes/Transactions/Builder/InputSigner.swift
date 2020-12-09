@@ -56,7 +56,7 @@ extension InputSigner: IInputSigner {
         let signature = inputSignature + Data([network.sigHash.value])
 
         switch previousOutput.scriptType {
-		case .p2pk, .p2wsh: return [signature]
+		case .p2pk, .p2wsh, .p2sh: return [signature]
         default: return [signature, publicKey]
         }
     }

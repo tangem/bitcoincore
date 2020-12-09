@@ -101,7 +101,7 @@ extension TransactionSigner: ITransactionSigner {
                 } else {
                     // standard (signature, publicKey, redeemScript) signature script
                     sigScriptData.append(redeemScript)
-                    inputToSign.input.signatureScript = signatureScript(from: sigScriptData)
+					inputToSign.input.signatureScript = Data([0x00]) + signatureScript(from: sigScriptData)
                 }
             default: throw SignError.notSupportedScriptType
             }
