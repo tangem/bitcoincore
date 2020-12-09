@@ -48,10 +48,16 @@ extension TransactionOutputExtractor: ITransactionExtractor {
                   lockingScript[0] == 0 || (lockingScript[0] > 0x50 && lockingScript[0] < 0x61), //push version byte 0 or 1-16
                   lockingScript[1] == 20 {
             // parse P2WPKH transaction output
-            payload = lockingScript.subdata(in: 0..<lockingScriptCount)
+            payload = lockingScript.subdata(in: 2..<lockingScriptCount)
             validScriptType = .p2wpkh
-        } else if lockingScriptCount > 0 && lockingScript[0] == OpCode.op_return {              // nullData output
-            payload = lockingScript.subdata(in: 0..<lockingScriptCount)
+			
+		} else if lockingScriptCount == ScriptType.p2wsh.size,
+				  lockingScript[0] == 0 || (lockingScript[0] > 0x50 && lockingScript[0] < 0x61),
+				  lockingScript[1] == 32 {
+			payload = lockingScript.subdata(in: 2..<lockingScriptCount)
+			validScriptType = .p2wsh
+		} else if lockingScriptCount > 0 && lockingScript[0] == OpCode.op_return {              // nullData output
+			payload = lockingScript.subdata(in: 0..<lockingScriptCount)
             validScriptType = .nullData
         }
 

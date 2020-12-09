@@ -8,16 +8,20 @@
 import Foundation
 import HsToolKit
 import Secp256k1Kit
+import OpenSslKit
 
 public class BitcoinManager {
     private let kit: AbstractKit
     private let coinRate: Decimal = pow(10, 8)
+	private let networkParams: INetwork
     private let walletPublicKey: Data
     private let compressedWalletPublicKey: Data
+	private var spendingScripts: [Script] = []
     
     public init(networkParams: INetwork, walletPublicKey: Data, compressedWalletPublicKey: Data, bip: Bip = .bip84) {
         self.walletPublicKey = walletPublicKey
         self.compressedWalletPublicKey = compressedWalletPublicKey
+		self.networkParams = networkParams
         let key = bip == .bip44 ? walletPublicKey : compressedWalletPublicKey
         let logger = Logger(minLogLevel: .verbose)
         kit  = try! BitcoinKit(withPubKey: key,
@@ -29,18 +33,33 @@ public class BitcoinManager {
                                logger: logger)
     }
     
-    public func fillBlockchainData(unspentOutputs: [UtxoDTO]) {
-        let utxos: [UnspentOutput] = unspentOutputs.map {
-            let output = Output(withValue: $0.value, index: $0.index, lockingScript: $0.script, transactionHash: $0.hash)
+	public func fillBlockchainData(unspentOutputs: [UtxoDTO], spendingScripts: [Script]) {
+		self.spendingScripts = spendingScripts
+		let scriptConverted = ScriptConverter()
+        let utxos: [UnspentOutput] = unspentOutputs.map { unspent in
+            let output = Output(withValue: unspent.value, index: unspent.index, lockingScript: unspent.script, transactionHash: unspent.hash)
             TransactionOutputExtractor.processOutput(output)
             let tx = Transaction()
-            
+			
             let pubKey: PublicKey
             switch output.scriptType {
             case .p2pkh:
                 pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: walletPublicKey)
-            case .p2wpkh:
-                pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedWalletPublicKey)
+			case .p2wpkh:
+				if let keyHash = output.keyHash {
+					// TODO: Create script builder
+					let script = OpCode.push(Data([OpCode.dup]) + Data([OpCode.hash160]) + OpCode.push(keyHash) + Data([OpCode.equalVerify]) + Data([OpCode.checkSig]))
+					output.redeemScript = script
+				}
+                
+				pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedWalletPublicKey)
+			case .p2wsh, .p2sh:
+				if let script = try? scriptConverted.decode(data: unspent.script),
+				   let redeemScript = self.findSpendingScript(for: script) {
+					output.redeemScript = redeemScript.scriptData
+				}
+				
+				pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedWalletPublicKey)
             default:
                 fatalError("Unsupported output script")
             }
@@ -81,6 +100,21 @@ public class BitcoinManager {
         let handler = NSDecimalNumberHandler(roundingMode: .plain, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
         return NSDecimalNumber(decimal: coinValue).rounding(accordingToBehavior: handler).intValue
     }
+	
+	private func findSpendingScript(for searchingScript: Script) -> Script? {
+		guard
+			searchingScript.chunks.count > 1,
+			let searchingScriptHash = searchingScript.chunks[1].data
+		else { return nil }
+		switch searchingScriptHash.count {
+		case 20:
+			return spendingScripts.first(where: { Kit.sha256ripemd160($0.scriptData) == searchingScriptHash })
+		case 32:
+			return spendingScripts.first(where: { Kit.sha256($0.scriptData) == searchingScriptHash })
+		default:
+			return nil
+		}
+	}
 }
 
 

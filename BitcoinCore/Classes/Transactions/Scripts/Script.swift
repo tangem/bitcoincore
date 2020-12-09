@@ -17,7 +17,7 @@ public class Script {
         }
     }
 
-    init(with data: Data, chunks: [Chunk]) {
+    public init(with data: Data, chunks: [Chunk]) {
         self.scriptData = data
         self.chunks = chunks
     }

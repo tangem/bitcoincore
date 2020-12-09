@@ -20,20 +20,20 @@ public class ScriptConverter {
         var bytesCount: Int?
         var bytesOffset = 1
         switch opCode {
-            case 0x01...0x4b: bytesCount = Int(opCode)
-            case 0x4c:                              // The next byte contains the number of bytes to be pushed onto the stack
+			case 0x01..<OpCode.pushData1: bytesCount = Int(opCode)
+			case OpCode.pushData1:                              // The next byte contains the number of bytes to be pushed onto the stack
                 bytesOffset += 1
                 guard data.count > 1 else {
                     throw ScriptError.wrongScriptLength
                 }
                 bytesCount = Int(data[1])
-            case 0x4d:                              // The next two bytes contain the number of bytes to be pushed onto the stack in little endian order
+			case OpCode.pushData2:                              // The next two bytes contain the number of bytes to be pushed onto the stack in little endian order
                 bytesOffset += 2
                 guard data.count > 2 else {
                     throw ScriptError.wrongScriptLength
                 }
                 bytesCount = Int(data[2]) << 8 + Int(data[1])
-            case 0x4e:                              // The next four bytes contain the number of bytes to be pushed onto the stack in little endian order
+			case OpCode.pushData4:                              // The next four bytes contain the number of bytes to be pushed onto the stack in little endian order
                 bytesOffset += 4
                 guard data.count > 5 else {
                     throw ScriptError.wrongScriptLength
@@ -63,7 +63,7 @@ extension ScriptConverter: IScriptConverter {
         while it < data.count {
             let opCode = data[it]
             switch opCode {
-            case 0x01...0x4e:
+			case 0x01...OpCode.pushData4:
                 let range = try getPushRange(data: data, it: it)
                 chunks.append(Chunk(scriptData: data, index: it, payloadRange: range))
                 it = range.upperBound

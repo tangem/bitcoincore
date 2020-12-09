@@ -44,5 +44,9 @@ public class SegWitBech32AddressConverter: IAddressConverter {
     public func convert(publicKey: PublicKey, type: ScriptType) throws -> Address {
         try convert(keyHash: OpCode.scriptWPKH(publicKey.keyHash), type: type)
     }
+	
+	public func convert(scriptHash: Data) throws -> Address {
+		try convert(keyHash: OpCode.scriptWPKH(scriptHash), type: .p2wsh)
+	}
 
 }

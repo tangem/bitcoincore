@@ -48,13 +48,18 @@ public class TransactionSerializer {
             data += try TransactionInputSerializer.serializedOutPoint(input: inputToSign)
 
             switch inputToSign.previousOutput.scriptType {
-            case .p2sh:
+			case .p2sh, .p2wsh:
                 guard let script = inputToSign.previousOutput.redeemScript else {
                     throw SerializationError.noPreviousOutputScript
                 }
                 let scriptLength = VarInt(script.count)
                 data += scriptLength.serialized()
                 data += script
+			case .p2wpkh:
+				guard let script = inputToSign.previousOutput.redeemScript else {
+					throw SerializationError.noPreviousOutputScript
+				}
+				data += script
             default:
                 data += OpCode.push(OpCode.p2pkhStart + OpCode.push(inputToSign.previousOutput.keyHash!) + OpCode.p2pkhFinish)
             }

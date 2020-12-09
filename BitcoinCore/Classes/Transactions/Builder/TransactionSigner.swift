@@ -76,14 +76,21 @@ extension TransactionSigner: ITransactionSigner {
             switch previousOutput.scriptType {
             case .p2pkh:
                 inputToSign.input.signatureScript = signatureScript(from: sigScriptData)
-            case .p2wpkh:
+            case .p2wpkh, .p2wsh:
                 mutableTransaction.transaction.segWit = true
-                inputToSign.input.witnessData = sigScriptData
+				if previousOutput.scriptType == .p2wsh {
+					guard let redeemScript = previousOutput.redeemScript else {
+						throw SignError.noRedeemScript
+					}
+					inputToSign.input.witnessData = [Data(), sigScriptData[0], redeemScript]
+				} else {
+					inputToSign.input.witnessData = sigScriptData
+				}
             case .p2wpkhSh:
                 mutableTransaction.transaction.segWit = true
                 inputToSign.input.witnessData = sigScriptData
                 inputToSign.input.signatureScript = OpCode.push(OpCode.scriptWPKH(publicKey.keyHash))
-            case .p2sh:
+			case .p2sh:
                 guard let redeemScript = previousOutput.redeemScript else {
                     throw SignError.noRedeemScript
                 }

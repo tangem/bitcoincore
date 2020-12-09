@@ -49,14 +49,14 @@ extension InputSigner: IInputSigner {
         let pubKey = input.previousOutputPublicKey
         let publicKey = pubKey.raw
 
-        let witness = previousOutput.scriptType == .p2wpkh || previousOutput.scriptType == .p2wpkhSh
+		let witness = previousOutput.scriptType == .p2wpkh || previousOutput.scriptType == .p2wpkhSh || previousOutput.scriptType == .p2wsh
 
         var serializedTransaction = try TransactionSerializer.serializedForSignature(transaction: transaction, inputsToSign: inputsToSign, outputs: outputs, inputIndex: index, forked: witness || network.sigHash.forked)
         serializedTransaction += UInt32(network.sigHash.value)
         let signature = inputSignature + Data([network.sigHash.value])
 
         switch previousOutput.scriptType {
-        case .p2pk: return [signature]
+		case .p2pk, .p2wsh: return [signature]
         default: return [signature, publicKey]
         }
     }
@@ -64,7 +64,7 @@ extension InputSigner: IInputSigner {
     func sigScriptHashToSign(transaction: Transaction, inputsToSign: [InputToSign], outputs: [Output], index: Int) throws -> Data {
         let input = inputsToSign[index]
         let previousOutput = input.previousOutput
-        let witness = previousOutput.scriptType == .p2wpkh || previousOutput.scriptType == .p2wpkhSh
+		let witness = previousOutput.scriptType == .p2wpkh || previousOutput.scriptType == .p2wpkhSh || previousOutput.scriptType == .p2wsh
 
         var serializedTransaction = try TransactionSerializer.serializedForSignature(transaction: transaction, inputsToSign: inputsToSign, outputs: outputs, inputIndex: index, forked: witness || network.sigHash.forked)
         serializedTransaction += UInt32(network.sigHash.value)

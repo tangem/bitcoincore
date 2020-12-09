@@ -37,7 +37,8 @@ class InputSetter {
 
         // Maximum nSequence value (0xFFFFFFFF) disables nLockTime.
         // According to BIP-125, any value less than 0xFFFFFFFE makes a Replace-by-Fee(RBF) opted in.
-        let sequence = 0xFFFFFFFE
+//        let sequence = 0xFFFFFFFE
+		let sequence = 0xFFFFFFFF
 
         return factory.inputToSign(withPreviousOutput: unspentOutput, script: Data(), sequence: sequence)
     }
