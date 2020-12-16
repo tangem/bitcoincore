@@ -80,14 +80,16 @@ public class BitcoinManager {
     }
     
     public func fee(for value: Decimal, address: String?, feeRate: Int, senderPay: Bool) -> Decimal {
+        let amount = convertToSatoshi(value: value)
+        var fee: Int = 0
         do {
-            let amount = convertToSatoshi(value: value)
-            let fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay)
-            return Decimal(fee) / coinRate
+            fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay)
         } catch {
+            fee = (try? kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: false)) ?? 0
             print(error)
-            return 0
         }
+        
+        return Decimal(fee) / coinRate
     }
     
     public func receiveAddress(for scriptType: ScriptType) -> String {
