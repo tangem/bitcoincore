@@ -158,29 +158,29 @@ extension BitcoinCore {
         dataProvider.transaction(hash: hash)
     }
 
-    public func send(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, pluginData: [UInt8: IPluginData] = [:]) throws -> FullTransaction {
-        try transactionCreator.create(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, pluginData: pluginData)
+    public func send(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, changeScript: Data?, pluginData: [UInt8: IPluginData] = [:]) throws -> FullTransaction {
+        try transactionCreator.create(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, changeScript: changeScript, pluginData: pluginData)
     }
 
-    public func send(to hash: Data, scriptType: ScriptType, value: Int, feeRate: Int, sortType: TransactionDataSortType) throws -> FullTransaction {
+    public func send(to hash: Data, scriptType: ScriptType, value: Int, feeRate: Int, changeScript: Data?, sortType: TransactionDataSortType) throws -> FullTransaction {
         let toAddress = try addressConverter.convert(keyHash: hash, type: scriptType)
-        return try transactionCreator.create(to: toAddress.stringValue, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, pluginData: [:])
+        return try transactionCreator.create(to: toAddress.stringValue, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, changeScript: changeScript, pluginData: [:])
     }
 
     func redeem(from unspentOutput: UnspentOutput, to address: String, feeRate: Int, sortType: TransactionDataSortType) throws -> FullTransaction {
         try transactionCreator.create(from: unspentOutput, to: address, feeRate: feeRate, sortType: sortType)
     }
 
-    public func createRawTransaction(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, pluginData: [UInt8: IPluginData] = [:]) throws -> Data {
-        try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, pluginData: pluginData)
+    public func createRawTransaction(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, changeScript: Data?, pluginData: [UInt8: IPluginData] = [:]) throws -> Data {
+        try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, changeScript: changeScript, pluginData: pluginData)
     }
     
-    public func createRawTransaction(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, signatures: [Data], pluginData: [UInt8: IPluginData] = [:]) throws -> Data {
-        try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, signatures: signatures, pluginData: pluginData)
+    public func createRawTransaction(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, pluginData: [UInt8: IPluginData] = [:]) throws -> Data {
+        try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, signatures: signatures, changeScript: changeScript, pluginData: pluginData)
     }
     
-    public func createRawHashesToSign(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, pluginData: [UInt8: IPluginData] = [:]) throws -> [Data] {
-        try transactionCreator.createRawHashesToSign(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, pluginData: pluginData)
+    public func createRawHashesToSign(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, changeScript: Data?, pluginData: [UInt8: IPluginData] = [:]) throws -> [Data] {
+        try transactionCreator.createRawHashesToSign(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, changeScript: changeScript, pluginData: pluginData)
     }
 
     public func validate(address: String, pluginData: [UInt8: IPluginData] = [:]) throws {
@@ -191,16 +191,16 @@ extension BitcoinCore {
         paymentAddressParser.parse(paymentAddress: paymentAddress)
     }
 
-    public func fee(for value: Int, toAddress: String? = nil, feeRate: Int, senderPay: Bool, pluginData: [UInt8: IPluginData] = [:]) throws -> Int {
-        try transactionFeeCalculator.fee(for: value, feeRate: feeRate, senderPay: senderPay, toAddress: toAddress, pluginData: pluginData)
+    public func fee(for value: Int, toAddress: String? = nil, feeRate: Int, senderPay: Bool, changeScript: Data?, pluginData: [UInt8: IPluginData] = [:]) throws -> Int {
+        try transactionFeeCalculator.fee(for: value, feeRate: feeRate, senderPay: senderPay, toAddress: toAddress, changeScript: changeScript, pluginData: pluginData)
     }
     
     public func setUnspents(_ unspents: [UnspentOutput]) {
         unspentOutputsSetter.setSpendableUtxos(unspents)
     }
     
-    public func maxSpendableValue(toAddress: String? = nil, feeRate: Int, pluginData: [UInt8: IPluginData] = [:]) throws -> Int {
-        let sendAllFee = try transactionFeeCalculator.fee(for: balance.spendable, feeRate: feeRate, senderPay: false, toAddress: toAddress, pluginData: pluginData)
+    public func maxSpendableValue(toAddress: String? = nil, feeRate: Int, changeScript: Data?, pluginData: [UInt8: IPluginData] = [:]) throws -> Int {
+        let sendAllFee = try transactionFeeCalculator.fee(for: balance.spendable, feeRate: feeRate, senderPay: false, toAddress: toAddress, changeScript: changeScript, pluginData: pluginData)
         return max(0, balance.spendable - sendAllFee)
     }
 

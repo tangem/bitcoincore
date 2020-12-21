@@ -47,7 +47,7 @@ class InputSetter {
 
 extension InputSetter: IInputSetter {
 
-    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType) throws {
+    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?) throws {
         let value = mutableTransaction.recipientValue
         let unspentOutputInfo = try unspentOutputSelector.select(
                 value: value, feeRate: feeRate,
@@ -64,11 +64,17 @@ extension InputSetter: IInputSetter {
 
         // Add change output if needed
         if let changeValue = unspentOutputInfo.changeValue {
-            let changePubKey = try publicKeyManager.changePublicKey()
-            let changeAddress = try addressConverter.convert(publicKey: changePubKey, type: changeScriptType)
+            if let changeScr = changeScript, case .p2wsh = changeScriptType {
+                let converter = SegWitBech32AddressConverter(prefix: BitcoinNetwork.mainnet.networkParams.bech32PrefixPattern, scriptConverter: ScriptConverter())
+                mutableTransaction.changeAddress = try converter.convert(scriptHash: changeScr)
+            } else {
+                let changePubKey = try publicKeyManager.changePublicKey()
+                let changeAddress = try addressConverter.convert(publicKey: changePubKey, type: changeScriptType)
 
-            mutableTransaction.changeAddress = changeAddress
+                mutableTransaction.changeAddress = changeAddress
+            }
             mutableTransaction.changeValue = changeValue
+            
         }
 
         try pluginManager.processInputs(mutableTransaction: mutableTransaction)

@@ -54,12 +54,14 @@ public class BitcoinManager {
                 
 				pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedWalletPublicKey)
 			case .p2wsh, .p2sh:
+                var scriptForChange: Data?
 				if let script = try? scriptConverted.decode(data: unspent.script),
 				   let redeemScript = self.findSpendingScript(for: script) {
 					output.redeemScript = redeemScript.scriptData
+                    scriptForChange = redeemScript.scriptData
 				}
 				
-				pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedWalletPublicKey)
+				pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: scriptForChange ?? Data())
             default:
                 fatalError("Unsupported output script")
             }
@@ -69,23 +71,23 @@ public class BitcoinManager {
         kit.setUnspents(utxos)
     }
     
-    public func buildForSign(target: String, amount: Decimal, feeRate: Int) throws -> [Data] {
+    public func buildForSign(target: String, amount: Decimal, feeRate: Int, changeScript: Data?) throws -> [Data] {
         let amount = convertToSatoshi(value: amount)
-        return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: .none)
+        return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: .none, changeScript: changeScript)
     }
     
-    public func buildForSend(target: String, amount: Decimal, feeRate: Int, derSignatures: [Data]) throws -> Data {
+    public func buildForSend(target: String, amount: Decimal, feeRate: Int, derSignatures: [Data], changeScript: Data?) throws -> Data {
         let amount = convertToSatoshi(value: amount)
-        return try kit.createRawTransaction(to: target, value: amount, feeRate: feeRate, sortType: .none, signatures: derSignatures)
+        return try kit.createRawTransaction(to: target, value: amount, feeRate: feeRate, sortType: .none, signatures: derSignatures, changeScript: changeScript)
     }
     
-    public func fee(for value: Decimal, address: String?, feeRate: Int, senderPay: Bool) -> Decimal {
+    public func fee(for value: Decimal, address: String?, feeRate: Int, senderPay: Bool, changeScript: Data?) -> Decimal {
         let amount = convertToSatoshi(value: value)
         var fee: Int = 0
         do {
-            fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay)
+            fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay, changeScript: changeScript)
         } catch {
-            fee = (try? kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: false)) ?? 0
+            fee = (try? kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: false, changeScript: changeScript)) ?? 0
             print(error)
         }
         
