@@ -6,6 +6,7 @@ public class TransactionSizeCalculator {
 
     static let signatureLength = 72 + 1     // signature length plus pushByte
     static let pubKeyLength = 33 + 1         // pubKey length plus pushByte
+    static let uncompressedPubKeyLength = 65 + 1         // pubKey length plus pushByte
     static let p2wpkhShLength = 22 + 1          // 0014<20byte-scriptHash> plus pushByte
 
     public init() {}
@@ -20,7 +21,7 @@ public class TransactionSizeCalculator {
 
         let sigScriptLength: Int
         switch output.scriptType {
-        case .p2pkh: sigScriptLength = TransactionSizeCalculator.signatureLength + TransactionSizeCalculator.pubKeyLength
+        case .p2pkh: sigScriptLength = TransactionSizeCalculator.signatureLength + TransactionSizeCalculator.uncompressedPubKeyLength
         case .p2pk: sigScriptLength = TransactionSizeCalculator.signatureLength
         case .p2wpkhSh: sigScriptLength = TransactionSizeCalculator.p2wpkhShLength
         case .p2sh:
@@ -28,6 +29,7 @@ public class TransactionSizeCalculator {
                 if let signatureScriptFunction = output.signatureScriptFunction {
                     // non-standard P2SH signature script
                     let emptySignature = Data(repeating: 0, count: TransactionSizeCalculator.signatureLength)
+                
                     let emptyPublicKey = Data(repeating: 0, count: TransactionSizeCalculator.pubKeyLength)
 
                     sigScriptLength = signatureScriptFunction([emptySignature, emptyPublicKey]).count
@@ -85,7 +87,7 @@ extension TransactionSizeCalculator: ITransactionSizeCalculator {
     public func inputSize(type: ScriptType) -> Int {              // in real bytes
         let sigScriptLength: Int
         switch type {
-        case .p2pkh: sigScriptLength = TransactionSizeCalculator.signatureLength + TransactionSizeCalculator.pubKeyLength
+        case .p2pkh: sigScriptLength = TransactionSizeCalculator.signatureLength + TransactionSizeCalculator.uncompressedPubKeyLength
         case .p2pk: sigScriptLength = TransactionSizeCalculator.signatureLength
         case .p2wpkhSh: sigScriptLength = TransactionSizeCalculator.p2wpkhShLength
         default: sigScriptLength = 0
