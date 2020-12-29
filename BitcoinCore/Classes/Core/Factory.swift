@@ -1,23 +1,7 @@
 import HsToolKit
 
 class Factory: IFactory {
-    private let network: INetwork
-    private let networkMessageParser: INetworkMessageParser
-    private let networkMessageSerializer: INetworkMessageSerializer
-
-    init(network: INetwork, networkMessageParser: INetworkMessageParser, networkMessageSerializer: INetworkMessageSerializer) {
-        self.network = network
-        self.networkMessageParser = networkMessageParser
-        self.networkMessageSerializer = networkMessageSerializer
-    }
-
-    func block(withHeader header: BlockHeader, previousBlock: Block) -> Block {
-        Block(withHeader: header, previousBlock: previousBlock)
-    }
-
-    func block(withHeader header: BlockHeader, height: Int) -> Block {
-        Block(withHeader: header, height: height)
-    }
+    init() {}
 
     func transaction(version: Int, lockTime: Int) -> Transaction {
         Transaction(version: version, lockTime: lockTime)
@@ -39,17 +23,4 @@ class Factory: IFactory {
     func nullDataOutput(data: Data) -> Output {
         Output(withValue: 0, index: 0, lockingScript: data, type: .nullData)
     }
-
-    func peer(withHost host: String, logger: Logger? = nil) -> IPeer {
-        Peer(host: host, network: network, connection: PeerConnection(host: host, port: network.port, networkMessageParser: networkMessageParser, networkMessageSerializer: networkMessageSerializer, logger: logger), connectionTimeoutManager: ConnectionTimeoutManager(), logger: logger)
-    }
-
-    func blockHash(withHeaderHash headerHash: Data, height: Int, order: Int = 0) -> BlockHash {
-        BlockHash(headerHash: headerHash, height: height, order: order)
-    }
-
-    func bloomFilter(withElements elements: [Data]) -> BloomFilter {
-        BloomFilter(elements: elements)
-    }
-
 }

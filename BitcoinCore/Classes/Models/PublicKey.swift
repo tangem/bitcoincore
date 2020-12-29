@@ -1,8 +1,7 @@
 import Foundation
-import GRDB
 import OpenSslKit
 
-public class PublicKey: Record {
+public class PublicKey {
 
     enum InitError: Error {
         case invalid
@@ -25,44 +24,5 @@ public class PublicKey: Record {
         raw = data
         keyHash = Kit.sha256ripemd160(data)
         scriptHashForP2WPKH = Kit.sha256ripemd160(OpCode.scriptWPKH(keyHash))
-
-        super.init()
     }
-
-    override open class var databaseTableName: String {
-        return "publicKeys"
-    }
-
-    enum Columns: String, ColumnExpression, CaseIterable {
-        case path
-        case account
-        case index
-        case external
-        case raw
-        case keyHash
-        case scriptHashForP2WPKH
-    }
-
-    required init(row: Row) {
-        path = row[Columns.path]
-        account = row[Columns.account]
-        index = row[Columns.index]
-        external = row[Columns.external]
-        raw = row[Columns.raw]
-        keyHash = row[Columns.keyHash]
-        scriptHashForP2WPKH = row[Columns.scriptHashForP2WPKH]
-
-        super.init(row: row)
-    }
-
-    override open func encode(to container: inout PersistenceContainer) {
-        container[Columns.path] = path
-        container[Columns.account] = account
-        container[Columns.index] = index
-        container[Columns.external] = external
-        container[Columns.raw] = raw
-        container[Columns.keyHash] = keyHash
-        container[Columns.scriptHashForP2WPKH] = scriptHashForP2WPKH
-    }
-
 }

@@ -1,8 +1,6 @@
 //import BitcoinCore
 
 class RegTest: INetwork {
-    let bundleName = "BitcoinKit"
-
     let pubKeyHash: UInt8 = 0x6f
     let privateKey: UInt8 = 0xef
     let scriptHash: UInt8 = 0xc4
@@ -13,8 +11,6 @@ class RegTest: INetwork {
     let port: UInt32 = 18444
     let coinType: UInt32 = 1
     let sigHash: SigHashType = .bitcoinAll
-    var syncableFromApi: Bool = false
-
     let dnsSeeds = [
          "btc-regtest.horizontalsystems.xyz",
          "btc01-regtest.horizontalsystems.xyz",

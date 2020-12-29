@@ -1,9 +1,7 @@
 import Foundation
-import GRDB
+public enum TransactionStatus: Int, Codable { case new, relayed, invalid }
 
-public enum TransactionStatus: Int, DatabaseValueConvertible, Codable { case new, relayed, invalid }
-
-public class Transaction: Record {
+public class Transaction {
     public var uid: String
     public var dataHash: Data
     public var version: Int
@@ -26,66 +24,5 @@ public class Transaction: Record {
         self.order = 0
         self.dataHash = Data()
         self.uid = UUID().uuidString
-
-        super.init()
     }
-
-
-    override open class var databaseTableName: String {
-        "transactions"
-    }
-
-    enum Columns: String, ColumnExpression, CaseIterable {
-        case uid
-        case dataHash
-        case version
-        case lockTime
-        case timestamp
-        case order
-        case blockHash
-        case isMine
-        case isOutgoing
-        case status
-        case segWit
-        case conflictingTxHash
-        case transactionInfoJson
-        case rawTransaction
-    }
-
-    required init(row: Row) {
-        uid = row[Columns.uid]
-        dataHash = row[Columns.dataHash]
-        version = row[Columns.version]
-        lockTime = row[Columns.lockTime]
-        timestamp = row[Columns.timestamp]
-        order = row[Columns.order]
-        blockHash = row[Columns.blockHash]
-        isMine = row[Columns.isMine]
-        isOutgoing = row[Columns.isOutgoing]
-        status = row[Columns.status]
-        segWit = row[Columns.segWit]
-        conflictingTxHash = row[Columns.conflictingTxHash]
-        transactionInfoJson = row[Columns.transactionInfoJson]
-        rawTransaction = row[Columns.rawTransaction]
-
-        super.init(row: row)
-    }
-
-    override open func encode(to container: inout PersistenceContainer) {
-        container[Columns.uid] = uid
-        container[Columns.dataHash] = dataHash
-        container[Columns.version] = version
-        container[Columns.lockTime] = lockTime
-        container[Columns.timestamp] = timestamp
-        container[Columns.order] = order
-        container[Columns.blockHash] = blockHash
-        container[Columns.isMine] = isMine
-        container[Columns.isOutgoing] = isOutgoing
-        container[Columns.status] = status
-        container[Columns.segWit] = segWit
-        container[Columns.conflictingTxHash] = conflictingTxHash
-        container[Columns.transactionInfoJson] = transactionInfoJson
-        container[Columns.rawTransaction] = rawTransaction
-    }
-
 }

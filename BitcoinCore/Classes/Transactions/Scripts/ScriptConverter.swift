@@ -1,3 +1,6 @@
+
+enum ScriptError: Error { case wrongScriptLength, wrongSequence }
+
 public class ScriptConverter {
 
     public init() {}

@@ -7,11 +7,10 @@
 
 import Foundation
 import HsToolKit
-import Secp256k1Kit
 import OpenSslKit
 
 public class BitcoinManager {
-    private let kit: AbstractKit
+    private let kit: BitcoinCore
     private let coinRate: Decimal = pow(10, 8)
 	private let networkParams: INetwork
     private let walletPublicKey: Data
@@ -24,13 +23,36 @@ public class BitcoinManager {
 		self.networkParams = networkParams
         let key = bip == .bip44 ? walletPublicKey : compressedWalletPublicKey
         let logger = Logger(minLogLevel: .verbose)
-        kit  = try! BitcoinKit(withPubKey: key,
-                               bip: bip,
-                               walletId: "defaultWalletId",
-                               syncMode: .full,
-                               networkParams: networkParams,
-                               confirmationsThreshold: 1,
-                               logger: logger)
+        let paymentAddressParser = PaymentAddressParser(validScheme: "bitcoin", removeScheme: true)
+        let scriptConverter = ScriptConverter()
+        let bech32AddressConverter = SegWitBech32AddressConverter(prefix: networkParams.bech32PrefixPattern, scriptConverter: scriptConverter)
+        let base58AddressConverter = Base58AddressConverter(addressVersion: networkParams.pubKeyHash, addressScriptVersion: networkParams.scriptHash)
+        
+        let bitcoinCoreBuilder = BitcoinCoreBuilder(logger: logger)
+        
+        let bitcoinCore = try! bitcoinCoreBuilder
+            .set(network: networkParams)
+            .set(pubKey: key)
+            .set(bip: bip)
+            .set(paymentAddressParser: paymentAddressParser)
+            .build()
+    
+        bitcoinCore.prepend(addressConverter: bech32AddressConverter)
+        
+        switch bip {
+        case .bip44:
+            bitcoinCore.add(restoreKeyConverter: Bip44RestoreKeyConverter(addressConverter: base58AddressConverter))
+            bitcoinCore.add(restoreKeyConverter: Bip49RestoreKeyConverter(addressConverter: base58AddressConverter))
+            bitcoinCore.add(restoreKeyConverter: Bip84RestoreKeyConverter(addressConverter: bech32AddressConverter))
+        case .bip49:
+            bitcoinCore.add(restoreKeyConverter: Bip49RestoreKeyConverter(addressConverter: base58AddressConverter))
+        case .bip84:
+            bitcoinCore.add(restoreKeyConverter: Bip84RestoreKeyConverter(addressConverter: bech32AddressConverter))
+        case .bip141:
+            bitcoinCore.add(restoreKeyConverter: Bip84RestoreKeyConverter(addressConverter: bech32AddressConverter))
+        }
+        
+        kit = bitcoinCore
     }
     
 	public func fillBlockchainData(unspentOutputs: [UtxoDTO], spendingScripts: [Script]) {
@@ -125,7 +147,6 @@ public class BitcoinManager {
 public class SimplePublicKeyManager: IPublicKeyManager {
     private let pubKey: PublicKey
     private let restoreKeyConverter: IRestoreKeyConverter
-    weak var bloomFilterManager: IBloomFilterManager?
 
     public init (compressedPublicKey: Data, restoreKeyConverter: IRestoreKeyConverter) {
         pubKey = PublicKey(withAccount: 0, index: 0, external: true, hdPublicKeyData: compressedPublicKey)
@@ -157,15 +178,6 @@ public class SimplePublicKeyManager: IPublicKeyManager {
     }
 }
 
-extension SimplePublicKeyManager: IBloomFilterProvider {
-    func filterElements() -> [Data] {
-        var elements = [Data]()
-        elements.append(contentsOf: restoreKeyConverter.bloomFilterElements(publicKey: pubKey))
-        return elements
-    }
-
-}
-
 
 class SimpleUnspentOutputProvider {
     let pluginManager: IPluginManager
@@ -187,16 +199,6 @@ extension SimpleUnspentOutputProvider: IUnspentOutputProvider {
         confirmedUtxo.filter { pluginManager.isSpendable(unspentOutput: $0) }
     }
 
-}
-
-extension SimpleUnspentOutputProvider: IBalanceProvider {
-
-    var balanceInfo: BalanceInfo {
-        let spendable =  spendableUtxo.map { $0.output.value }.reduce(0, +)
-        let unspendable = unspendableUtxo.map { $0.output.value }.reduce(0, +)
-
-        return BalanceInfo(spendable: spendable, unspendable: unspendable)
-    }
 }
 
 extension SimpleUnspentOutputProvider: IUnspentOutputsSetter {

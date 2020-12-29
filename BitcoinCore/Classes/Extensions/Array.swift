@@ -1,6 +1,4 @@
 import Foundation
-import GRDB
-
 extension Array where Element == FullTransaction {
 
     func inTopologicalOrder() -> [FullTransaction] {
@@ -47,30 +45,6 @@ extension Array where Element : Hashable {
         return Array(Set(self))
     }
 
-}
-
-extension Array: SQLExpressible where Element == Data {
-    
-    public var sqlExpression: SQLExpression {
-        return databaseValue
-    }
-    
-}
-
-extension Array: DatabaseValueConvertible where Element == Data {
-    
-    public var databaseValue: DatabaseValue {
-        return DataListSerializer.serialize(dataList: self).databaseValue
-    }
-    
-    public static func fromDatabaseValue(_ dbValue: DatabaseValue) -> Array<Element>? {
-        if case let DatabaseValue.Storage.blob(value) = dbValue.storage {
-            return DataListSerializer.deserialize(data: value)
-        }
-        
-        return nil
-    }
-    
 }
 
 extension Array {

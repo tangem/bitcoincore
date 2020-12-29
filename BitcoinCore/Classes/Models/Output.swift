@@ -1,7 +1,5 @@
 import Foundation
-import GRDB
-
-public enum ScriptType: Int, DatabaseValueConvertible {
+public enum ScriptType: Int {
     case unknown, p2pkh, p2pk, p2multi, p2sh, p2wsh, p2wpkh, p2wpkhSh, nullData
 
     var size: Int {
@@ -26,8 +24,7 @@ public enum ScriptType: Int, DatabaseValueConvertible {
 
 }
 
-public class Output: Record {
-
+public class Output {
     public var value: Int
     public var lockingScript: Data
     public var index: Int
@@ -57,63 +54,9 @@ public class Output: Record {
         self.redeemScript = redeemScript
         self.address = address
         self.keyHash = keyHash
-
-        super.init()
-
+        
         if let publicKey = publicKey {
             set(publicKey: publicKey)
         }
     }
-
-    override open class var databaseTableName: String {
-        "outputs"
-    }
-
-    enum Columns: String, ColumnExpression, CaseIterable {
-        case value
-        case lockingScript
-        case index
-        case transactionHash
-        case publicKeyPath
-        case changeOutput
-        case scriptType
-        case redeemScript
-        case keyHash
-        case address
-        case pluginId
-        case pluginData
-    }
-
-    required init(row: Row) {
-        value = row[Columns.value]
-        lockingScript = row[Columns.lockingScript]
-        index = row[Columns.index]
-        transactionHash = row[Columns.transactionHash]
-        publicKeyPath = row[Columns.publicKeyPath]
-        changeOutput = row[Columns.changeOutput]
-        scriptType = row[Columns.scriptType]
-        redeemScript = row[Columns.redeemScript]
-        keyHash = row[Columns.keyHash]
-        address = row[Columns.address]
-        pluginId = row[Columns.pluginId]
-        pluginData = row[Columns.pluginData]
-
-        super.init(row: row)
-    }
-
-    override open func encode(to container: inout PersistenceContainer) {
-        container[Columns.value] = value
-        container[Columns.lockingScript] = lockingScript
-        container[Columns.index] = index
-        container[Columns.transactionHash] = transactionHash
-        container[Columns.publicKeyPath] = publicKeyPath
-        container[Columns.changeOutput] = changeOutput
-        container[Columns.scriptType] = scriptType
-        container[Columns.redeemScript] = redeemScript
-        container[Columns.keyHash] = keyHash
-        container[Columns.address] = address
-        container[Columns.pluginId] = pluginId
-        container[Columns.pluginData] = pluginData
-    }
-
 }

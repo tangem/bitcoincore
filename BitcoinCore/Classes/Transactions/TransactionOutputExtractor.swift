@@ -1,19 +1,17 @@
 import HsToolKit
 
 class TransactionOutputExtractor {
-    let transactionKeySetter: ITransactionPublicKeySetter
     let pluginManager: IPluginManager
     let logger: Logger?
 
-    init(transactionKeySetter: ITransactionPublicKeySetter, pluginManager: IPluginManager, logger: Logger? = nil) {
-        self.transactionKeySetter = transactionKeySetter
+    init(pluginManager: IPluginManager, logger: Logger? = nil) {
         self.pluginManager = pluginManager
         self.logger = logger
     }
 
 }
 
-extension TransactionOutputExtractor: ITransactionExtractor {
+extension TransactionOutputExtractor {
 
     static func processOutput(_ output: Output) {
         var payload: Data?
@@ -64,24 +62,4 @@ extension TransactionOutputExtractor: ITransactionExtractor {
         output.scriptType = validScriptType
         output.keyHash = payload
     }
-    
-    func extract(transaction: FullTransaction) {
-        var nullDataOutput: Output? = nil
-
-        for output in transaction.outputs {
-            TransactionOutputExtractor.processOutput(output)
-            if output.scriptType == .nullData {
-                nullDataOutput = output
-            }
-            
-            if transactionKeySetter.set(output: output) {
-                transaction.header.isMine = true
-            }
-        }
-
-        if let nullDataOutput = nullDataOutput {
-            try? pluginManager.processTransactionWithNullData(transaction: transaction, nullDataOutput: nullDataOutput)
-        }
-    }
-
 }

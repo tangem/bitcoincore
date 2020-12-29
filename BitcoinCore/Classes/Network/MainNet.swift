@@ -1,8 +1,6 @@
 //import BitcoinCore
 
  class MainNet: INetwork {
-    let bundleName = "BitcoinKit"
-
     let pubKeyHash: UInt8 = 0x00
     let privateKey: UInt8 = 0x80
     let scriptHash: UInt8 = 0x05
@@ -13,7 +11,6 @@
     let port: UInt32 = 8333
     let coinType: UInt32 = 0
     let sigHash: SigHashType = .bitcoinAll
-    var syncableFromApi: Bool = true
 
     let dnsSeeds = [
         "seed.bitcoin.sipa.be",         // Pieter Wuille

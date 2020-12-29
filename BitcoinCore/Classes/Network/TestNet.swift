@@ -2,9 +2,6 @@
 
 class TestNet: INetwork {
     private static let testNetDiffDate = 1329264000 // February 16th 2012
-
-    let bundleName = "BitcoinKit"
-
     let pubKeyHash: UInt8 = 0x6f
     let privateKey: UInt8 = 0xef
     let scriptHash: UInt8 = 0xc4
@@ -15,8 +12,6 @@ class TestNet: INetwork {
     let port: UInt32 = 18333
     let coinType: UInt32 = 1
     let sigHash: SigHashType = .bitcoinAll
-    var syncableFromApi: Bool = true
-
     let dnsSeeds = [
         "testnet-seed.bitcoin.petertodd.org",    // Peter Todd
         "testnet-seed.bitcoin.jonasschnelli.ch", // Jonas Schnelli
