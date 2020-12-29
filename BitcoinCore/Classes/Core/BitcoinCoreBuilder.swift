@@ -1,6 +1,4 @@
 import Foundation
-//import HdWalletKit
-import HsToolKit
 
 public class BitcoinCoreBuilder {
     public enum BuildError: Error { case peerSizeLessThanRequired, noSeedData, noWalletId, noNetwork, noPaymentAddressParser, noAddressSelector, noStorage, noInitialSyncApi }
@@ -15,7 +13,6 @@ public class BitcoinCoreBuilder {
     private var network: INetwork?
     private var paymentAddressParser: IPaymentAddressParser?
     private var plugins = [IPlugin]()
-    private var logger: Logger
 
     public func set(pubKey: Data) -> BitcoinCoreBuilder {
         self.pubKey = pubKey
@@ -42,10 +39,6 @@ public class BitcoinCoreBuilder {
         return self
     }
 
-    public init(logger: Logger) {
-        self.logger = logger
-    }
-
     public func build() throws -> BitcoinCore {
         let pubKey = self.pubKey ?? Data()
         
@@ -58,7 +51,7 @@ public class BitcoinCoreBuilder {
 
         let scriptConverter = ScriptConverter()
         let restoreKeyConverterChain = RestoreKeyConverterChain()
-        let pluginManager = PluginManager(scriptConverter: scriptConverter, logger: logger)
+        let pluginManager = PluginManager(scriptConverter: scriptConverter)
 
         plugins.forEach { pluginManager.add(plugin: $0) }
         restoreKeyConverterChain.add(converter: pluginManager)

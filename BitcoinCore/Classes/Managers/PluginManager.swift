@@ -1,4 +1,3 @@
-import HsToolKit
 
 class PluginManager {
     enum PluginError: Error {
@@ -8,11 +7,8 @@ class PluginManager {
     private let scriptConverter: IScriptConverter
     private var plugins = [UInt8: IPlugin]()
 
-    private let logger: Logger?
-
-    init(scriptConverter: IScriptConverter, logger: Logger? = nil) {
+    init(scriptConverter: IScriptConverter) {
         self.scriptConverter = scriptConverter
-        self.logger = logger
     }
 
 }
@@ -86,7 +82,7 @@ extension PluginManager: IPluginManager {
                 try plugin.processTransactionWithNullData(transaction: transaction, nullDataChunks: &iterator)
             }
         } catch {
-            logger?.error(error)
+            print(error)
         }
     }
 

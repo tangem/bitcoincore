@@ -1,5 +1,3 @@
-import HsToolKit
-
 enum BlockValidatorType { case header, bits, legacy, testNet, EDA, DAA, DGW }
 
 

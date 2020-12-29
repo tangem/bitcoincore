@@ -1,5 +1,4 @@
 import Foundation
-import OpenSslKit
 
 public class PublicKey {
 
@@ -22,7 +21,7 @@ public class PublicKey {
         self.external = external
         path = "\(account)/\(external ? 1 : 0)/\(index)"
         raw = data
-        keyHash = Kit.sha256ripemd160(data)
-        scriptHashForP2WPKH = Kit.sha256ripemd160(OpCode.scriptWPKH(keyHash))
+        keyHash = data.sha256Ripemd160
+        scriptHashForP2WPKH = OpCode.scriptWPKH(keyHash).sha256Ripemd160
     }
 }

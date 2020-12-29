@@ -1,32 +1,3 @@
-PODS:
-  - Alamofire (5.2.2)
-  - HsToolKit.swift (1.1.0):
-    - Alamofire (~> 5.0)
-    - ObjectMapper (~> 3.0)
-    - RxSwift (~> 5.0)
-  - ObjectMapper (3.5.3)
-  - OpenSslKit.swift (1.2.2)
-  - RxSwift (5.1.1)
-
-DEPENDENCIES:
-  - HsToolKit.swift (~> 1.1.0)
-  - OpenSslKit.swift
-
-SPEC REPOS:
-  trunk:
-    - Alamofire
-    - HsToolKit.swift
-    - ObjectMapper
-    - OpenSslKit.swift
-    - RxSwift
-
-SPEC CHECKSUMS:
-  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
-  HsToolKit.swift: d47ef3e8c507a6e980f2f6d819c5b0cf05845910
-  ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
-  OpenSslKit.swift: 0e2194853fd9ce42006cf18c89743331406a10a9
-  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
-
-PODFILE CHECKSUM: c74ed7023192da3c450916c2169f7ab9182ef61c
+PODFILE CHECKSUM: 6f49ab857b5f76f46fb042e5897f0017e82c5bfc
 
 COCOAPODS: 1.10.0

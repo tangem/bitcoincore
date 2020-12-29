@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D1BCE4C259B6C7C00EDA274 /* Base58.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1BCE43259B6C7C00EDA274 /* Base58.swift */; };
+		5D1BCE54259B6E9700EDA274 /* BinaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1BCE53259B6E9700EDA274 /* BinaryConvertible.swift */; };
+		5D1BCE58259B71F400EDA274 /* RIPEMD160.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1BCE57259B71F400EDA274 /* RIPEMD160.swift */; };
 		5D6B6F0E257A539A00161EAF /* BitcoinCoreErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6E53257A539900161EAF /* BitcoinCoreErrors.swift */; };
 		5D6B6F0F257A539A00161EAF /* Bip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6E54257A539900161EAF /* Bip.swift */; };
 		5D6B6F12257A539A00161EAF /* BitcoinCoreBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6E57257A539900161EAF /* BitcoinCoreBuilder.swift */; };
@@ -29,7 +32,6 @@
 		5D6B6F68257A539A00161EAF /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6EB6257A539900161EAF /* Transaction.swift */; };
 		5D6B6F6C257A539A00161EAF /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6EBC257A539900161EAF /* Array.swift */; };
 		5D6B6F6D257A539A00161EAF /* SynchronizedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6EBD257A539900161EAF /* SynchronizedArray.swift */; };
-		5D6B6F6F257A539A00161EAF /* URLRequestConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6EBF257A539900161EAF /* URLRequestConvertible.swift */; };
 		5D6B6F79257A539A00161EAF /* TransactionSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6ECA257A539900161EAF /* TransactionSizeCalculator.swift */; };
 		5D6B6F7A257A539A00161EAF /* TransactionFeeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6ECB257A539900161EAF /* TransactionFeeCalculator.swift */; };
 		5D6B6F7B257A539A00161EAF /* TransactionCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6B6ECC257A539900161EAF /* TransactionCreator.swift */; };
@@ -92,6 +94,9 @@
 		127E7EA5482D77A6BE092BAF /* Pods-BitcoinCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitcoinCore.release.xcconfig"; path = "Target Support Files/Pods-BitcoinCore/Pods-BitcoinCore.release.xcconfig"; sourceTree = "<group>"; };
 		567D6CD61E7032D3AE03C7DA /* Pods_BitcoinCore_BitcoinCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BitcoinCore_BitcoinCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AD6B5AD9A088847208B4146 /* Pods-BitcoinCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitcoinCore.debug.xcconfig"; path = "Target Support Files/Pods-BitcoinCore/Pods-BitcoinCore.debug.xcconfig"; sourceTree = "<group>"; };
+		5D1BCE43259B6C7C00EDA274 /* Base58.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base58.swift; sourceTree = "<group>"; };
+		5D1BCE53259B6E9700EDA274 /* BinaryConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryConvertible.swift; sourceTree = "<group>"; };
+		5D1BCE57259B71F400EDA274 /* RIPEMD160.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RIPEMD160.swift; sourceTree = "<group>"; };
 		5D49499F257C0319009A71F0 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		5D4949A3257C0319009A71F0 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		5D6B6E53257A539900161EAF /* BitcoinCoreErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitcoinCoreErrors.swift; sourceTree = "<group>"; };
@@ -116,7 +121,6 @@
 		5D6B6EB6257A539900161EAF /* Transaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		5D6B6EBC257A539900161EAF /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		5D6B6EBD257A539900161EAF /* SynchronizedArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchronizedArray.swift; sourceTree = "<group>"; };
-		5D6B6EBF257A539900161EAF /* URLRequestConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestConvertible.swift; sourceTree = "<group>"; };
 		5D6B6ECA257A539900161EAF /* TransactionSizeCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionSizeCalculator.swift; sourceTree = "<group>"; };
 		5D6B6ECB257A539900161EAF /* TransactionFeeCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionFeeCalculator.swift; sourceTree = "<group>"; };
 		5D6B6ECC257A539900161EAF /* TransactionCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionCreator.swift; sourceTree = "<group>"; };
@@ -285,7 +289,6 @@
 				5D4949A3257C0319009A71F0 /* String+.swift */,
 				5D49499F257C0319009A71F0 /* Data.swift */,
 				5D6B6EBD257A539900161EAF /* SynchronizedArray.swift */,
-				5D6B6EBF257A539900161EAF /* URLRequestConvertible.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -362,14 +365,17 @@
 		5D6B6EF1257A539A00161EAF /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				5D1BCE53259B6E9700EDA274 /* BinaryConvertible.swift */,
 				5D6B6EF3257A539A00161EAF /* Base58AddressConverter.swift */,
 				5D6B6EF4257A539A00161EAF /* Helpers.swift */,
 				5D6B6EF5257A539A00161EAF /* TransactionDataSorters.swift */,
 				5D6B6EF6257A539A00161EAF /* AddressConverterChain.swift */,
+				5D1BCE43259B6C7C00EDA274 /* Base58.swift */,
 				5D6B6EF7257A539A00161EAF /* Bip69.swift */,
 				5D6B6EF9257A539A00161EAF /* UnspentOutputSelectorChain.swift */,
 				5D6B6EFB257A539A00161EAF /* PaymentAddressParser.swift */,
 				5D6B6EFC257A539A00161EAF /* Serialization.swift */,
+				5D1BCE57259B71F400EDA274 /* RIPEMD160.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -463,7 +469,6 @@
 				5DF1A5962577A01500B83D20 /* Sources */,
 				5DF1A5972577A01500B83D20 /* Frameworks */,
 				5DF1A5982577A01500B83D20 /* Resources */,
-				287EBBB1C122B4F8A00FF779 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -551,23 +556,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		287EBBB1C122B4F8A00FF779 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BitcoinCore-BitcoinCoreTests/Pods-BitcoinCore-BitcoinCoreTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BitcoinCore-BitcoinCoreTests/Pods-BitcoinCore-BitcoinCoreTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BitcoinCore-BitcoinCoreTests/Pods-BitcoinCore-BitcoinCoreTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3965EC9ADC3B91BC890E255B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -615,6 +603,7 @@
 				5D6B6F93257A539A00161EAF /* SegWitAddress.swift in Sources */,
 				5D74540D259A560900A859C9 /* TransactionDataSorterFactory.swift in Sources */,
 				5D6B6F16257A539A00161EAF /* RestoreKeyConverter.swift in Sources */,
+				5D1BCE58259B71F400EDA274 /* RIPEMD160.swift in Sources */,
 				5D6B6F59257A539A00161EAF /* BitcoinPaymentData.swift in Sources */,
 				5D6B6F15257A539A00161EAF /* Protocols.swift in Sources */,
 				5D6B6F90257A539A00161EAF /* TransactionOutputSerializer.swift in Sources */,
@@ -627,8 +616,8 @@
 				5D6B6F26257A539A00161EAF /* PluginManager.swift in Sources */,
 				5D6B6F92257A539A00161EAF /* SegWitBech32.swift in Sources */,
 				5D6B6F7E257A539A00161EAF /* ScriptConverter.swift in Sources */,
+				5D1BCE4C259B6C7C00EDA274 /* Base58.swift in Sources */,
 				5D6B701C257A62F300161EAF /* BitcoinManager.swift in Sources */,
-				5D6B6F6F257A539A00161EAF /* URLRequestConvertible.swift in Sources */,
 				5D6B6F8D257A539A00161EAF /* TransactionSerializer.swift in Sources */,
 				5D6B6F79257A539A00161EAF /* TransactionSizeCalculator.swift in Sources */,
 				5D6B6F8A257A539A00161EAF /* TransactionSigner.swift in Sources */,
@@ -656,6 +645,7 @@
 				5D6B6FA2257A539A00161EAF /* PaymentAddressParser.swift in Sources */,
 				5D6B6F54257A539A00161EAF /* ByteStream.swift in Sources */,
 				5D6B6F81257A539A00161EAF /* OpCode.swift in Sources */,
+				5D1BCE54259B6E9700EDA274 /* BinaryConvertible.swift in Sources */,
 				5D6B6F87257A539A00161EAF /* OutputSetter.swift in Sources */,
 				5D6B6F68257A539A00161EAF /* Transaction.swift in Sources */,
 				5D6B6F85257A539A00161EAF /* InputSigner.swift in Sources */,

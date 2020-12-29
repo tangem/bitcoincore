@@ -1,4 +1,3 @@
-import OpenSslKit
 
 class InputSigner {
     enum SignError: Error {
@@ -41,7 +40,7 @@ extension InputSigner: IInputSigner {
 
         var serializedTransaction = try TransactionSerializer.serializedForSignature(transaction: transaction, inputsToSign: inputsToSign, outputs: outputs, inputIndex: index, forked: witness || network.sigHash.forked)
         serializedTransaction += UInt32(network.sigHash.value)
-        let signatureHash = Kit.sha256sha256(serializedTransaction)
+        let signatureHash = serializedTransaction.doubleSha256()
         return signatureHash
     }
 

@@ -1,5 +1,4 @@
 import Foundation
-import OpenSslKit
 
 public class TransactionSerializer {
 
@@ -35,13 +34,13 @@ public class TransactionSerializer {
             let hashPrevouts = try inputsToSign.flatMap { input in
                 try TransactionInputSerializer.serializedOutPoint(input: input)
             }
-            data += Kit.sha256sha256((Data(hashPrevouts)))
+            data += Data(hashPrevouts).doubleSha256()
 
             var sequences = Data()
             for inputToSign in inputsToSign {
                 sequences += UInt32(inputToSign.input.sequence)
             }
-            data += Kit.sha256sha256(sequences)
+            data += sequences.doubleSha256()
 
             let inputToSign = inputsToSign[inputIndex]
 
@@ -68,7 +67,7 @@ public class TransactionSerializer {
             data += UInt32(inputToSign.input.sequence)
 
             let hashOutputs = outputs.flatMap { TransactionOutputSerializer.serialize(output: $0) }
-            data += Kit.sha256sha256((Data(hashOutputs)))
+            data += Data(hashOutputs).doubleSha256()
         } else {
             data += UInt32(transaction.version)
             data += VarInt(inputsToSign.count).serialized()

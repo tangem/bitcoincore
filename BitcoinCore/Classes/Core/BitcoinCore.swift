@@ -1,5 +1,4 @@
 import Foundation
-import HsToolKit
 
 public class BitcoinCore {
     private let publicKeyManager: IPublicKeyManager

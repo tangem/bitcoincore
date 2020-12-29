@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import HsToolKit
-import OpenSslKit
 
 public class BitcoinManager {
     private let kit: BitcoinCore
@@ -22,13 +20,12 @@ public class BitcoinManager {
         self.compressedWalletPublicKey = compressedWalletPublicKey
 		self.networkParams = networkParams
         let key = bip == .bip44 ? walletPublicKey : compressedWalletPublicKey
-        let logger = Logger(minLogLevel: .verbose)
         let paymentAddressParser = PaymentAddressParser(validScheme: "bitcoin", removeScheme: true)
         let scriptConverter = ScriptConverter()
         let bech32AddressConverter = SegWitBech32AddressConverter(prefix: networkParams.bech32PrefixPattern, scriptConverter: scriptConverter)
         let base58AddressConverter = Base58AddressConverter(addressVersion: networkParams.pubKeyHash, addressScriptVersion: networkParams.scriptHash)
         
-        let bitcoinCoreBuilder = BitcoinCoreBuilder(logger: logger)
+        let bitcoinCoreBuilder = BitcoinCoreBuilder()
         
         let bitcoinCore = try! bitcoinCoreBuilder
             .set(network: networkParams)
@@ -134,9 +131,9 @@ public class BitcoinManager {
 		else { return nil }
 		switch searchingScriptHash.count {
 		case 20:
-			return spendingScripts.first(where: { Kit.sha256ripemd160($0.scriptData) == searchingScriptHash })
+            return spendingScripts.first(where: { $0.scriptData.sha256Ripemd160 == searchingScriptHash })
 		case 32:
-			return spendingScripts.first(where: { Kit.sha256($0.scriptData) == searchingScriptHash })
+            return spendingScripts.first(where: { $0.scriptData.sha256Ripemd160 == searchingScriptHash })
 		default:
 			return nil
 		}

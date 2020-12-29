@@ -1,12 +1,8 @@
-import HsToolKit
-
 class TransactionOutputExtractor {
     let pluginManager: IPluginManager
-    let logger: Logger?
 
-    init(pluginManager: IPluginManager, logger: Logger? = nil) {
+    init(pluginManager: IPluginManager) {
         self.pluginManager = pluginManager
-        self.logger = logger
     }
 
 }

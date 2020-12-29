@@ -1,27 +1,3 @@
-import OpenSslKit
-//import UIExtensions
-
-public struct BlockHeader {
-
-    public let version: Int
-    public let headerHash: Data
-    public let previousBlockHeaderHash: Data
-    public let merkleRoot: Data
-    public let timestamp: Int
-    public let bits: Int
-    public let nonce: Int
-
-    public init(version: Int, headerHash: Data, previousBlockHeaderHash: Data, merkleRoot: Data, timestamp: Int, bits: Int, nonce: Int) {
-        self.version = version
-        self.headerHash = headerHash
-        self.previousBlockHeaderHash = previousBlockHeaderHash
-        self.merkleRoot = merkleRoot
-        self.timestamp = timestamp
-        self.bits = bits
-        self.nonce = nonce
-    }
-
-}
 
 public struct FullTransaction {
 
@@ -34,7 +10,7 @@ public struct FullTransaction {
         self.inputs = inputs
         self.outputs = outputs
 
-        self.header.dataHash = Kit.sha256sha256(TransactionSerializer.serialize(transaction: self, withoutWitness: true))
+        self.header.dataHash = TransactionSerializer.serialize(transaction: self, withoutWitness: true).doubleSha256()
         for input in self.inputs {
             input.transactionHash = self.header.dataHash
         }

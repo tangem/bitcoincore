@@ -1,4 +1,3 @@
-import OpenSslKit
 
 public class Base58AddressConverter: IAddressConverter {
     private static let checkSumLength = 4
@@ -22,7 +21,7 @@ public class Base58AddressConverter: IAddressConverter {
             throw BitcoinCoreErrors.AddressConversion.invalidAddressLength
         }
         let givenChecksum = hex.suffix(Base58AddressConverter.checkSumLength)
-        let doubleSHA256 = Kit.sha256sha256(hex.prefix(hex.count - Base58AddressConverter.checkSumLength))
+        let doubleSHA256 = (hex.prefix(hex.count - Base58AddressConverter.checkSumLength)).doubleSha256()
         let actualChecksum = doubleSHA256.prefix(Base58AddressConverter.checkSumLength)
         guard givenChecksum == actualChecksum else {
             throw BitcoinCoreErrors.AddressConversion.invalidChecksum
@@ -54,7 +53,7 @@ public class Base58AddressConverter: IAddressConverter {
         }
 
         var withVersion = (Data([version])) + keyHash
-        let doubleSHA256 = Kit.sha256sha256(withVersion)
+        let doubleSHA256 = withVersion.doubleSha256()
         let checksum = doubleSHA256.prefix(4)
         withVersion += checksum
         let base58 = Base58.encode(withVersion)

@@ -1,5 +1,4 @@
 import Foundation
-import OpenSslKit
 
 public class OpCode {
     public static let p2pkhStart = Data([OpCode.dup, OpCode.hash160])

@@ -1,4 +1,6 @@
 import Foundation
+import CryptoKit
+import CommonCrypto
 
 extension Data {
     
@@ -28,4 +30,36 @@ extension Data {
         Data(self.reversed()).hex
     }
     
+}
+
+
+extension Data {
+    var ripemd160: Data {
+        _RIPEMD160.hash(message: self)
+    }
+    
+    var sha256Ripemd160: Data {
+        _RIPEMD160.hash(message: sha256())
+    }
+    
+    func doubleSha256() -> Data {
+        sha256().sha256()
+    }
+    
+    func sha256() -> Data {
+        if #available(iOS 13.0, *) {
+            let digest = SHA256.hash(data: self)
+            return Data(digest)
+        } else {
+            return sha256Old()
+        }
+    }
+    
+    private func sha256Old() -> Data {
+        guard let res = NSMutableData(length: Int(CC_SHA256_DIGEST_LENGTH)) else {
+            return Data()
+        }
+        CC_SHA256((self as NSData).bytes, CC_LONG(count), res.mutableBytes.assumingMemoryBound(to: UInt8.self))
+        return res as Data
+    }
 }
