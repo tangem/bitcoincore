@@ -18,7 +18,7 @@ extension TransactionBuilder: ITransactionBuilder {
         let mutableTransaction = MutableTransaction()
 
         try recipientSetter.setRecipient(to: mutableTransaction, toAddress: toAddress, value: value, pluginData: pluginData, skipChecks: false)
-        try inputSetter.setInputs(to: mutableTransaction, feeRate: feeRate, senderPay: senderPay, sortType: sortType, changeScript: changeScript, isReplacedByFee: isReplacedByFee)
+        try inputSetter.setInputs(to: mutableTransaction, feeRate: feeRate, senderPay: senderPay, sortType: sortType, changeScript: changeScript, isReplacedByFee: isReplacedByFee, feeCalculation: false)
 
         outputSetter.setOutputs(to: mutableTransaction, sortType: sortType)
         try signer.sign(mutableTransaction: mutableTransaction, signatures: signatures)
@@ -30,7 +30,7 @@ extension TransactionBuilder: ITransactionBuilder {
         let mutableTransaction = MutableTransaction()
 
         try recipientSetter.setRecipient(to: mutableTransaction, toAddress: toAddress, value: value, pluginData: pluginData, skipChecks: false)
-        try inputSetter.setInputs(to: mutableTransaction, feeRate: feeRate, senderPay: senderPay, sortType: sortType, changeScript: changeScript, isReplacedByFee: isReplacedByFee)
+        try inputSetter.setInputs(to: mutableTransaction, feeRate: feeRate, senderPay: senderPay, sortType: sortType, changeScript: changeScript, isReplacedByFee: isReplacedByFee, feeCalculation: false)
 
         outputSetter.setOutputs(to: mutableTransaction, sortType: sortType)
         let hashes = try signer.hashesToSign(mutableTransaction:mutableTransaction)

@@ -100,7 +100,7 @@ public protocol IDustCalculator {
 }
 
 public protocol IUnspentOutputSelector {
-    func select(value: Int, feeRate: Int, outputScriptType: ScriptType, changeType: ScriptType, senderPay: Bool, pluginDataOutputSize: Int) throws -> SelectedUnspentOutputInfo
+    func select(value: Int, feeRate: Int, outputScriptType: ScriptType, changeType: ScriptType, senderPay: Bool, pluginDataOutputSize: Int, feeCalculation: Bool) throws -> SelectedUnspentOutputInfo
 }
 
 public protocol IUnspentOutputProvider {
@@ -163,7 +163,7 @@ protocol IOutputSetter {
 }
 
 protocol IInputSetter {
-    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool) throws
+    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool, feeCalculation: Bool) throws
     func setInputs(to mutableTransaction: MutableTransaction, fromUnspentOutput unspentOutput: UnspentOutput, feeRate: Int, isReplacedByFee: Bool) throws
 }
 

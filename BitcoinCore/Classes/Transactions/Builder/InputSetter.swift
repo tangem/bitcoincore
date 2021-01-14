@@ -58,12 +58,13 @@ class InputSetter {
 
 extension InputSetter: IInputSetter {
 
-    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool) throws {
+    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool, feeCalculation: Bool) throws {
         let value = mutableTransaction.recipientValue
         let unspentOutputInfo = try unspentOutputSelector.select(
                 value: value, feeRate: feeRate,
                 outputScriptType: mutableTransaction.recipientAddress.scriptType, changeType: changeScriptType,
-                senderPay: senderPay, pluginDataOutputSize: mutableTransaction.pluginDataOutputSize
+                senderPay: senderPay, pluginDataOutputSize: mutableTransaction.pluginDataOutputSize,
+            feeCalculation: feeCalculation
         )
         let unspentOutputs = inputSorterFactory.sorter(for: sortType).sort(unspentOutputs: unspentOutputInfo.unspentOutputs)
 

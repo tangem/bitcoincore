@@ -1,3 +1,5 @@
+import Foundation
+
 class TransactionFeeCalculator {
 
     private let recipientSetter: IRecipientSetter
@@ -25,12 +27,12 @@ extension TransactionFeeCalculator: ITransactionFeeCalculator {
         let mutableTransaction = MutableTransaction()
 
         try recipientSetter.setRecipient(to: mutableTransaction, toAddress: toAddress ?? (try sampleAddress()), value: value, pluginData: pluginData, skipChecks: true)
-        try inputSetter.setInputs(to: mutableTransaction, feeRate: feeRate, senderPay: senderPay, sortType: .none, changeScript: changeScript, isReplacedByFee: isReplacedByFee)
+        try inputSetter.setInputs(to: mutableTransaction, feeRate: feeRate, senderPay: senderPay, sortType: .none, changeScript: changeScript, isReplacedByFee: isReplacedByFee, feeCalculation: true)
 
         let inputsTotalValue = mutableTransaction.inputsToSign.reduce(0) { total, input in total + input.previousOutput.value }
         let outputsTotalValue = mutableTransaction.recipientValue + mutableTransaction.changeValue
 
-        return inputsTotalValue - outputsTotalValue
+        return abs(inputsTotalValue - outputsTotalValue)
     }
 
 }

@@ -106,7 +106,7 @@ public class BitcoinManager {
         do {
             fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay, changeScript: changeScript, isReplacedByFee: isReplacedByFee)
         } catch {
-            fee = (try? kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: false, changeScript: changeScript, isReplacedByFee: isReplacedByFee)) ?? 0
+//            fee = (try? kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: false, changeScript: changeScript, isReplacedByFee: isReplacedByFee)) ?? 0
             print(error)
         }
         

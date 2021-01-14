@@ -30,14 +30,16 @@ public class UnspentOutputSelector {
 
 extension UnspentOutputSelector: IUnspentOutputSelector {
 
-    public func select(value: Int, feeRate: Int, outputScriptType: ScriptType = .p2pkh, changeType: ScriptType = .p2pkh, senderPay: Bool, pluginDataOutputSize: Int) throws -> SelectedUnspentOutputInfo {
+    public func select(value: Int, feeRate: Int, outputScriptType: ScriptType = .p2pkh, changeType: ScriptType = .p2pkh, senderPay: Bool, pluginDataOutputSize: Int, feeCalculation: Bool) throws -> SelectedUnspentOutputInfo {
         let unspentOutputs = provider.spendableUtxo
         let recipientOutputDust = dustCalculator.dust(type: outputScriptType)
         let changeOutputDust = dustCalculator.dust(type: changeType)
 
         // check if value is not dust. recipientValue may be less, but not more
-        guard value >= recipientOutputDust else {
-            throw BitcoinCoreErrors.SendValueErrors.dust
+        if !feeCalculation {
+            guard value >= recipientOutputDust else {
+                throw BitcoinCoreErrors.SendValueErrors.dust
+            }
         }
         guard !unspentOutputs.isEmpty else {
             throw BitcoinCoreErrors.SendValueErrors.emptyOutputs
@@ -76,13 +78,15 @@ extension UnspentOutputSelector: IUnspentOutputSelector {
                 } else {
                     // Here senderPay is false, because otherwise "dust" exception would throw far above.
                     // Adding more UTXOs will make fee even greater, making recipientValue even less and dust anyway
-                    throw BitcoinCoreErrors.SendValueErrors.dust
+                    if !feeCalculation {
+                        throw BitcoinCoreErrors.SendValueErrors.dust
+                    }
                 }
             }
         }
 
         // if all unspentOutputs are selected and total value less than needed, then throw error
-        if totalValue < sentValue {
+        if !feeCalculation && totalValue < sentValue {
             throw BitcoinCoreErrors.SendValueErrors.notEnough
         }
 
@@ -92,10 +96,11 @@ extension UnspentOutputSelector: IUnspentOutputSelector {
         // if selected UTXOs total value >= recipientValue(toOutput value) + fee(for transaction with change output) + dust(minimum changeOutput value)
         if totalValue >= withChangeRecipientValue + changeOutputHavingTransactionFee + changeOutputDust {
             // totalValue is too much, we must have change output
-            guard withChangeRecipientValue >= recipientOutputDust else {
-                throw BitcoinCoreErrors.SendValueErrors.dust
+            if !feeCalculation {
+                guard  withChangeRecipientValue >= recipientOutputDust else {
+                    throw BitcoinCoreErrors.SendValueErrors.dust
+                }
             }
-
             return SelectedUnspentOutputInfo(unspentOutputs: selectedOutputs, recipientValue: withChangeRecipientValue, changeValue: totalValue - withChangeSentValue)
         }
 
