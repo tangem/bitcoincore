@@ -67,18 +67,18 @@ public protocol ITransactionSyncer: class {
 }
 
 public protocol ITransactionCreator {
-    func createRawTransaction(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, pluginData: [UInt8: IPluginData]) throws -> Data
-    func createRawHashesToSign(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, pluginData: [UInt8: IPluginData]) throws -> [Data]
+    func createRawTransaction(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData]) throws -> Data
+    func createRawHashesToSign(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData]) throws -> [Data]
 }
 
 protocol ITransactionBuilder {
-    func buildTransaction(toAddress: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, pluginData: [UInt8: IPluginData]) throws -> FullTransaction
+    func buildTransaction(toAddress: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData]) throws -> FullTransaction
     
-    func buildTransactionToSign(toAddress: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, pluginData: [UInt8: IPluginData]) throws -> [Data]
+    func buildTransactionToSign(toAddress: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData]) throws -> [Data]
 }
 
 protocol ITransactionFeeCalculator {
-    func fee(for value: Int, feeRate: Int, senderPay: Bool, toAddress: String?, changeScript: Data?, pluginData: [UInt8: IPluginData]) throws -> Int
+    func fee(for value: Int, feeRate: Int, senderPay: Bool, toAddress: String?, changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData]) throws -> Int
 }
 
 protocol IInputSigner {
@@ -163,8 +163,8 @@ protocol IOutputSetter {
 }
 
 protocol IInputSetter {
-    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?) throws
-    func setInputs(to mutableTransaction: MutableTransaction, fromUnspentOutput unspentOutput: UnspentOutput, feeRate: Int) throws
+    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool) throws
+    func setInputs(to mutableTransaction: MutableTransaction, fromUnspentOutput unspentOutput: UnspentOutput, feeRate: Int, isReplacedByFee: Bool) throws
 }
 
 protocol ITransactionSigner {
