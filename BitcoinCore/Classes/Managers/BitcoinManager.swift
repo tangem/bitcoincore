@@ -133,7 +133,7 @@ public class BitcoinManager {
 		case 20:
             return spendingScripts.first(where: { $0.scriptData.sha256Ripemd160 == searchingScriptHash })
 		case 32:
-            return spendingScripts.first(where: { $0.scriptData.sha256Ripemd160 == searchingScriptHash })
+            return spendingScripts.first(where: { $0.scriptData.sha256() == searchingScriptHash })
 		default:
 			return nil
 		}
