@@ -1,6 +1,6 @@
 import Foundation
 
-public class BitcoinCore {
+public class BCBitcoinCore {
     private let publicKeyManager: IPublicKeyManager
     private let addressConverter: AddressConverterChain
     private let restoreKeyConverterChain: RestoreKeyConverterChain
@@ -70,7 +70,7 @@ public class BitcoinCore {
 
 }
 
-extension BitcoinCore {
+extension BCBitcoinCore {
     public func createRawTransaction(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData] = [:]) throws -> Data {
         try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, signatures: signatures, changeScript: changeScript, isReplacedByFee: isReplacedByFee, pluginData: pluginData)
     }
@@ -143,7 +143,7 @@ extension BitcoinCore {
 }
 
 
-extension BitcoinCore {
+extension BCBitcoinCore {
     public enum TransactionFilter {
         case p2shOutput(scriptHash: Data)
         case outpoint(transactionHash: Data, outputIndex: Int)

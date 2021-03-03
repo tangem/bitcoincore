@@ -1,5 +1,5 @@
 
-enum ScriptError: Error { case wrongScriptLength, wrongSequence }
+enum ScriptError: Error { case wrongScriptLength, wrongSequence, unexpectedScriptType }
 
 public class ScriptConverter {
 

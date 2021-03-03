@@ -39,7 +39,7 @@ public class BitcoinCoreBuilder {
         return self
     }
 
-    public func build() throws -> BitcoinCore {
+    public func build() throws -> BCBitcoinCore {
         let pubKey = self.pubKey ?? Data()
         
         guard let network = self.network else {
@@ -77,7 +77,7 @@ public class BitcoinCoreBuilder {
 
         let transactionCreator = TransactionCreator(transactionBuilder: transactionBuilder)
 
-        let bitcoinCore = BitcoinCore(
+        let bitcoinCore = BCBitcoinCore(
                 publicKeyManager: publicKeyManager,
                 addressConverter: addressConverter,
                 restoreKeyConverterChain: restoreKeyConverterChain,

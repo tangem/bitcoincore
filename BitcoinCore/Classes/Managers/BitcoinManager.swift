@@ -8,7 +8,7 @@
 import Foundation
 
 public class BitcoinManager {
-    private let kit: BitcoinCore
+    private let kit: BCBitcoinCore
     private let coinRate: Decimal = pow(10, 8)
 	private let networkParams: INetwork
     private let walletPublicKey: Data
