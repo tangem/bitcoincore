@@ -71,12 +71,12 @@ public class BCBitcoinCore {
 }
 
 extension BCBitcoinCore {
-    public func createRawTransaction(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData] = [:]) throws -> Data {
-        try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, signatures: signatures, changeScript: changeScript, isReplacedByFee: isReplacedByFee, pluginData: pluginData)
+    public func createRawTransaction(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData] = [:]) throws -> Data {
+        try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, signatures: signatures, changeScript: changeScript, sequence: sequence, pluginData: pluginData)
     }
     
-    public func createRawHashesToSign(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData] = [:]) throws -> [Data] {
-        try transactionCreator.createRawHashesToSign(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, changeScript: changeScript, isReplacedByFee: isReplacedByFee, pluginData: pluginData)
+    public func createRawHashesToSign(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData] = [:]) throws -> [Data] {
+        try transactionCreator.createRawHashesToSign(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, changeScript: changeScript, sequence: sequence, pluginData: pluginData)
     }
 
     public func validate(address: String, pluginData: [UInt8: IPluginData] = [:]) throws {
@@ -87,8 +87,8 @@ extension BCBitcoinCore {
         paymentAddressParser.parse(paymentAddress: paymentAddress)
     }
 
-    public func fee(for value: Int, toAddress: String? = nil, feeRate: Int, senderPay: Bool, changeScript: Data?, isReplacedByFee: Bool, pluginData: [UInt8: IPluginData] = [:]) throws -> Int {
-        try transactionFeeCalculator.fee(for: value, feeRate: feeRate, senderPay: senderPay, toAddress: toAddress, changeScript: changeScript, isReplacedByFee: isReplacedByFee, pluginData: pluginData)
+    public func fee(for value: Int, toAddress: String? = nil, feeRate: Int, senderPay: Bool, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData] = [:]) throws -> Int {
+        try transactionFeeCalculator.fee(for: value, feeRate: feeRate, senderPay: senderPay, toAddress: toAddress, changeScript: changeScript, sequence: sequence, pluginData: pluginData)
     }
     
     public func setUnspents(_ unspents: [UnspentOutput]) {

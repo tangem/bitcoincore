@@ -1,7 +1,7 @@
 public enum SequenceValues: Int {
-    case baseTx = 0xFFFFFFFA
-    case replasedByFeeTx = 0xFFFFFFFD
-    case `default` = 0xFFFFFFFF
+    case `default` = 0x0
+    case replacedByFeeMaxValue = 0xFFFFFFFD
+    case disabledReplacedByFee = 0xFFFFFFFE
 }
 
 class InputSetter {
@@ -33,7 +33,7 @@ class InputSetter {
         self.inputSorterFactory = inputSorterFactory
     }
 
-    private func input(fromUnspentOutput unspentOutput: UnspentOutput, isReplacedByFee: Bool) throws -> InputToSign {
+    private func input(fromUnspentOutput unspentOutput: UnspentOutput, sequence: Int) throws -> InputToSign {
 //        if unspentOutput.output.scriptType == .p2wpkh {
             // todo: refactoring version byte!
             // witness key hashes stored with program byte and push code to determine
@@ -44,13 +44,6 @@ class InputSetter {
         // Maximum nSequence value (0xFFFFFFFF) disables nLockTime.
         // According to BIP-125, any value less than 0xFFFFFFFE makes a Replace-by-Fee(RBF) opted in.
 //        let sequence = 0xFFFFFFFE
-        let sequence: Int
-        if isReplacedByFee {
-            sequence = SequenceValues.replasedByFeeTx.rawValue
-        } else {
-            sequence = SequenceValues.baseTx.rawValue
-        }
-
         return factory.inputToSign(withPreviousOutput: unspentOutput, script: Data(), sequence: sequence)
     }
 
@@ -58,7 +51,7 @@ class InputSetter {
 
 extension InputSetter: IInputSetter {
 
-    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, isReplacedByFee: Bool, feeCalculation: Bool) throws {
+    func setInputs(to mutableTransaction: MutableTransaction, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, feeCalculation: Bool) throws {
         let value = mutableTransaction.recipientValue
         let unspentOutputInfo = try unspentOutputSelector.select(
                 value: value, feeRate: feeRate,
@@ -69,7 +62,7 @@ extension InputSetter: IInputSetter {
         let unspentOutputs = inputSorterFactory.sorter(for: sortType).sort(unspentOutputs: unspentOutputInfo.unspentOutputs)
 
         for unspentOutput in unspentOutputs {
-            mutableTransaction.add(inputToSign: try input(fromUnspentOutput: unspentOutput, isReplacedByFee: isReplacedByFee))
+            mutableTransaction.add(inputToSign: try input(fromUnspentOutput: unspentOutput, sequence: sequence))
         }
 
         mutableTransaction.recipientValue = unspentOutputInfo.recipientValue
@@ -92,7 +85,7 @@ extension InputSetter: IInputSetter {
         try pluginManager.processInputs(mutableTransaction: mutableTransaction)
     }
 
-    func setInputs(to mutableTransaction: MutableTransaction, fromUnspentOutput unspentOutput: UnspentOutput, feeRate: Int, isReplacedByFee: Bool) throws {
+    func setInputs(to mutableTransaction: MutableTransaction, fromUnspentOutput unspentOutput: UnspentOutput, feeRate: Int, sequence: Int) throws {
         guard unspentOutput.output.scriptType == .p2sh else {
             throw UnspentOutputError.notSupportedScriptType
         }
@@ -106,7 +99,7 @@ extension InputSetter: IInputSetter {
         }
 
         // Add to mutable transaction
-        mutableTransaction.add(inputToSign: try input(fromUnspentOutput: unspentOutput, isReplacedByFee: isReplacedByFee))
+        mutableTransaction.add(inputToSign: try input(fromUnspentOutput: unspentOutput, sequence: sequence))
         mutableTransaction.recipientValue = unspentOutput.output.value - fee
     }
 

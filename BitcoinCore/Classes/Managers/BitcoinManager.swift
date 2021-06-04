@@ -90,23 +90,23 @@ public class BitcoinManager {
         kit.setUnspents(utxos)
     }
     
-    public func buildForSign(target: String, amount: Decimal, feeRate: Int, changeScript: Data?, isReplacedByFee: Bool) throws -> [Data] {
+    public func buildForSign(target: String, amount: Decimal, feeRate: Int, changeScript: Data?, sequence: Int? = nil) throws -> [Data] {
         let amount = convertToSatoshi(value: amount)
-        return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: .none, changeScript: changeScript, isReplacedByFee: isReplacedByFee)
+        return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: .none, changeScript: changeScript, sequence: sequence ?? 0)
     }
     
-    public func buildForSend(target: String, amount: Decimal, feeRate: Int, derSignatures: [Data], changeScript: Data?, isReplacedByFee: Bool) throws -> Data {
+    public func buildForSend(target: String, amount: Decimal, feeRate: Int, derSignatures: [Data], changeScript: Data?, sequence: Int? = nil) throws -> Data {
         let amount = convertToSatoshi(value: amount)
-        return try kit.createRawTransaction(to: target, value: amount, feeRate: feeRate, sortType: .none, signatures: derSignatures, changeScript: changeScript, isReplacedByFee: isReplacedByFee)
+        return try kit.createRawTransaction(to: target, value: amount, feeRate: feeRate, sortType: .none, signatures: derSignatures, changeScript: changeScript, sequence: sequence ?? 0)
     }
     
-    public func fee(for value: Decimal, address: String?, feeRate: Int, senderPay: Bool, changeScript: Data?, isReplacedByFee: Bool) -> Decimal {
+    public func fee(for value: Decimal, address: String?, feeRate: Int, senderPay: Bool, changeScript: Data?, sequence: Int? = nil) -> Decimal {
         let amount = convertToSatoshi(value: value)
         var fee: Int = 0
         do {
-            fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay, changeScript: changeScript, isReplacedByFee: isReplacedByFee)
+            fee = try kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: senderPay, changeScript: changeScript, sequence: sequence ?? 0)
         } catch {
-//            fee = (try? kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: false, changeScript: changeScript, isReplacedByFee: isReplacedByFee)) ?? 0
+//            fee = (try? kit.fee(for: amount, toAddress: address, feeRate: feeRate, senderPay: false, changeScript: changeScript, sequence: sequence)) ?? 0
             print(error)
         }
         
