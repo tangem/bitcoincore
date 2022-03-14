@@ -24,6 +24,7 @@ public class BitcoinManager {
         let scriptConverter = ScriptConverter()
         let bech32AddressConverter = SegWitBech32AddressConverter(prefix: networkParams.bech32PrefixPattern, scriptConverter: scriptConverter)
         let base58AddressConverter = Base58AddressConverter(addressVersion: networkParams.pubKeyHash, addressScriptVersion: networkParams.scriptHash)
+        let bech32CashAddr = CashBech32AddressConverter(prefix: networkParams.bech32PrefixPattern)
         
         let bitcoinCoreBuilder = BitcoinCoreBuilder()
         
@@ -35,6 +36,7 @@ public class BitcoinManager {
             .build()
     
         bitcoinCore.prepend(addressConverter: bech32AddressConverter)
+        bitcoinCore.prepend(addressConverter: bech32CashAddr)
         
         switch bip {
         case .bip44:
