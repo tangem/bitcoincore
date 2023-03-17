@@ -1,6 +1,6 @@
 import Foundation
 
-class CashAddrBech32 {
+public class CashAddrBech32 {
     private static let base32Alphabets = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
     public static func encode(_ bytes: Data, prefix: String) -> String {
