@@ -92,14 +92,14 @@ public class BitcoinManager {
         kit.setUnspents(utxos)
     }
     
-    public func buildForSign(target: String, amount: Decimal, feeRate: Int, changeScript: Data?, sequence: Int? = nil) throws -> [Data] {
+    public func buildForSign(target: String, amount: Decimal, feeRate: Int, sortType: TransactionDataSortType = .bip69, changeScript: Data?, sequence: Int? = nil) throws -> [Data] {
         let amount = convertToSatoshi(value: amount)
-        return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: .bip69, changeScript: changeScript, sequence: sequence ?? 0)
+        return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: sortType, changeScript: changeScript, sequence: sequence ?? 0)
     }
     
-    public func buildForSend(target: String, amount: Decimal, feeRate: Int, derSignatures: [Data], changeScript: Data?, sequence: Int? = nil) throws -> Data {
+    public func buildForSend(target: String, amount: Decimal, feeRate: Int, sortType: TransactionDataSortType = .bip69, derSignatures: [Data], changeScript: Data?, sequence: Int? = nil) throws -> Data {
         let amount = convertToSatoshi(value: amount)
-        return try kit.createRawTransaction(to: target, value: amount, feeRate: feeRate, sortType: .bip69, signatures: derSignatures, changeScript: changeScript, sequence: sequence ?? 0)
+        return try kit.createRawTransaction(to: target, value: amount, feeRate: feeRate, sortType: sortType, signatures: derSignatures, changeScript: changeScript, sequence: sequence ?? 0)
     }
     
     public func fee(for value: Decimal, address: String?, feeRate: Int, senderPay: Bool, changeScript: Data?, sequence: Int? = nil) -> Decimal {
