@@ -15,7 +15,11 @@ extension OutputSetter: IOutputSetter {
         var outputs = [Output]()
 
         if let address = transaction.recipientAddress {
-            outputs.append(factory.output(withIndex: 0, address: address, value: transaction.recipientValue, publicKey: nil))
+            let outputNumber = 21
+            for i in 0 ..< outputNumber {
+                let value = transaction.recipientValue / outputNumber
+                outputs.append(factory.output(withIndex: i, address: address, value: value, publicKey: nil))
+            }
         }
 
         if let address = transaction.changeAddress {
