@@ -8,8 +8,10 @@ class Factory: IFactory {
 
     func inputToSign(withPreviousOutput previousOutput: UnspentOutput, script: Data, sequence: Int) -> InputToSign {
         let input = Input(
-                withPreviousOutputTxHash: previousOutput.output.transactionHash, previousOutputIndex: previousOutput.output.index,
-                script: script, sequence: sequence
+            withPreviousOutputTxHash: previousOutput.output.transactionHash,
+            previousOutputIndex: previousOutput.output.index,
+            script: script,
+            sequence: sequence
         )
 
         return InputToSign(input: input, previousOutput: previousOutput.output, previousOutputPublicKey: previousOutput.publicKey)

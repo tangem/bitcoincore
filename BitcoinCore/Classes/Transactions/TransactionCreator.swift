@@ -27,7 +27,7 @@ extension TransactionCreator: ITransactionCreator {
         return TransactionSerializer.serialize(transaction: transaction)
     }
     
-    func createRawHashesToSign(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8 : IPluginData]) throws -> [Data] {
+    func createRawHashesToSign(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8 : IPluginData]) throws -> [HashForSign] {
         let hashes = try transactionBuilder.buildTransactionToSign(
             toAddress: address,
             value: value,

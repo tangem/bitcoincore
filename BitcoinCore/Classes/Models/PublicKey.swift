@@ -1,16 +1,10 @@
 import Foundation
 
-public class PublicKey {
-
-    enum InitError: Error {
-        case invalid
-        case wrongNetwork
-    }
-
-    public let path: String
+public struct PublicKey: Hashable {
     public let account: Int
     public let index: Int
     public let external: Bool
+    public let path: String
     public let raw: Data
     public let keyHash: Data
     public let scriptHashForP2WPKH: Data

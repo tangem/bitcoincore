@@ -27,7 +27,7 @@ public protocol IHasher {
     func hash(data: Data) -> Data
 }
 
-protocol IInitialSyncerDelegate: class {
+protocol IInitialSyncerDelegate: AnyObject {
     func onSyncSuccess()
     func onSyncFailed(error: Error)
 }
@@ -46,7 +46,7 @@ public protocol IScriptConverter {
     func decode(data: Data) throws -> Script
 }
 
-protocol IScriptExtractor: class {
+protocol IScriptExtractor: AnyObject {
     var type: ScriptType { get }
     func extract(from data: Data, converter: IScriptConverter) throws -> Data?
 }
@@ -59,7 +59,7 @@ protocol ITransactionPublicKeySetter {
     func set(output: Output) -> Bool
 }
 
-public protocol ITransactionSyncer: class {
+public protocol ITransactionSyncer: AnyObject {
     func newTransactions() -> [FullTransaction]
     func handleRelayed(transactions: [FullTransaction])
     func handleInvalid(fullTransaction: FullTransaction)
@@ -68,13 +68,13 @@ public protocol ITransactionSyncer: class {
 
 public protocol ITransactionCreator {
     func createRawTransaction(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData]) throws -> Data
-    func createRawHashesToSign(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData]) throws -> [Data]
+    func createRawHashesToSign(to address: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData]) throws -> [HashForSign]
 }
 
 protocol ITransactionBuilder {
     func buildTransaction(toAddress: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, signatures: [Data], changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData]) throws -> FullTransaction
     
-    func buildTransactionToSign(toAddress: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData]) throws -> [Data]
+    func buildTransactionToSign(toAddress: String, value: Int, feeRate: Int, senderPay: Bool, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData]) throws -> [HashForSign]
 }
 
 protocol ITransactionFeeCalculator {
@@ -112,7 +112,7 @@ public protocol IUnspentOutputsSetter {
 }
 
 
-public protocol INetwork: class {
+public protocol INetwork: AnyObject {
     var pubKeyHash: UInt8 { get }
     var privateKey: UInt8 { get }
     var scriptHash: UInt8 { get }
@@ -169,7 +169,7 @@ protocol IInputSetter {
 
 protocol ITransactionSigner {
     func sign(mutableTransaction: MutableTransaction, signatures: [Data]) throws
-    func hashesToSign(mutableTransaction: MutableTransaction) throws -> [Data]
+    func hashesToSign(mutableTransaction: MutableTransaction) throws -> [HashForSign]
 }
 
 public protocol IPluginData {

@@ -78,6 +78,10 @@
 		5DF1A5A22577A01500B83D20 /* BitcoinCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF1A5942577A01400B83D20 /* BitcoinCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9B7BFA0488BA382BCBCAE3E /* Pods_BitcoinCore_BitcoinCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567D6CD61E7032D3AE03C7DA /* Pods_BitcoinCore_BitcoinCoreTests.framework */; };
 		E7BB55606E3E11AE8892886C /* Pods_BitcoinCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8345ED73DBA9F7848E2FBFE5 /* Pods_BitcoinCore.framework */; };
+		EFD717C32A24DB6100E5430D /* CashBech32AddressConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD717C02A24DB6100E5430D /* CashBech32AddressConverter.swift */; };
+		EFD717C42A24DB6100E5430D /* CashAddrBech32.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD717C12A24DB6100E5430D /* CashAddrBech32.swift */; };
+		EFD717C52A24DB6100E5430D /* CashAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD717C22A24DB6100E5430D /* CashAddress.swift */; };
+		EFD717C72A24DB8200E5430D /* SignedHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD717C62A24DB8200E5430D /* SignedHash.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -169,6 +173,10 @@
 		737A6A65A08976BA1DE38D30 /* Pods-BitcoinCore-BitcoinCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitcoinCore-BitcoinCoreTests.debug.xcconfig"; path = "Target Support Files/Pods-BitcoinCore-BitcoinCoreTests/Pods-BitcoinCore-BitcoinCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8345ED73DBA9F7848E2FBFE5 /* Pods_BitcoinCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BitcoinCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B03681470A68E771ECEA2453 /* Pods-BitcoinCore-BitcoinCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BitcoinCore-BitcoinCoreTests.release.xcconfig"; path = "Target Support Files/Pods-BitcoinCore-BitcoinCoreTests/Pods-BitcoinCore-BitcoinCoreTests.release.xcconfig"; sourceTree = "<group>"; };
+		EFD717C02A24DB6100E5430D /* CashBech32AddressConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashBech32AddressConverter.swift; sourceTree = "<group>"; };
+		EFD717C12A24DB6100E5430D /* CashAddrBech32.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashAddrBech32.swift; sourceTree = "<group>"; };
+		EFD717C22A24DB6100E5430D /* CashAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashAddress.swift; sourceTree = "<group>"; };
+		EFD717C62A24DB8200E5430D /* SignedHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedHash.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,6 +286,7 @@
 				5D6B6EAF257A539900161EAF /* Output.swift */,
 				5D6B6EB3257A539900161EAF /* Input.swift */,
 				5D6B6EB6257A539900161EAF /* Transaction.swift */,
+				EFD717C62A24DB8200E5430D /* SignedHash.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -365,6 +374,9 @@
 		5D6B6EF1257A539A00161EAF /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				EFD717C12A24DB6100E5430D /* CashAddrBech32.swift */,
+				EFD717C22A24DB6100E5430D /* CashAddress.swift */,
+				EFD717C02A24DB6100E5430D /* CashBech32AddressConverter.swift */,
 				5D1BCE53259B6E9700EDA274 /* BinaryConvertible.swift */,
 				5D6B6EF3257A539A00161EAF /* Base58AddressConverter.swift */,
 				5D6B6EF4257A539A00161EAF /* Helpers.swift */,
@@ -589,6 +601,7 @@
 				5D6B6F82257A539A00161EAF /* DustCalculator.swift in Sources */,
 				5D6B6F9E257A539A00161EAF /* Bip69.swift in Sources */,
 				5D6B7008257A56C000161EAF /* MainNet.swift in Sources */,
+				EFD717C42A24DB6100E5430D /* CashAddrBech32.swift in Sources */,
 				5D6B6F89257A539A00161EAF /* TransactionBuilder.swift in Sources */,
 				5D6B6FA0257A539A00161EAF /* UnspentOutputSelectorChain.swift in Sources */,
 				5D745423259A62B200A859C9 /* Data.swift in Sources */,
@@ -621,6 +634,7 @@
 				5D6B6F8D257A539A00161EAF /* TransactionSerializer.swift in Sources */,
 				5D6B6F79257A539A00161EAF /* TransactionSizeCalculator.swift in Sources */,
 				5D6B6F8A257A539A00161EAF /* TransactionSigner.swift in Sources */,
+				EFD717C72A24DB8200E5430D /* SignedHash.swift in Sources */,
 				5D6B6F5E257A539A00161EAF /* SigHashType.swift in Sources */,
 				5D6B6F7D257A539A00161EAF /* Chunk.swift in Sources */,
 				5D6B700A257A56C000161EAF /* TestNet.swift in Sources */,
@@ -628,11 +642,13 @@
 				5D6B6F88257A539A00161EAF /* InputSetter.swift in Sources */,
 				5D6B6F9C257A539A00161EAF /* TransactionDataSorters.swift in Sources */,
 				5D6B6F61257A539A00161EAF /* Output.swift in Sources */,
+				EFD717C32A24DB6100E5430D /* CashBech32AddressConverter.swift in Sources */,
 				5D6B6F5B257A539A00161EAF /* PublicKey.swift in Sources */,
 				5D6B6FA3257A539A00161EAF /* Serialization.swift in Sources */,
 				5D6B6F8E257A539A00161EAF /* TransactionInputSerializer.swift in Sources */,
 				5D6B6F23257A539A00161EAF /* UnspentOutputSelector.swift in Sources */,
 				5D6B6F83257A539A00161EAF /* RecipientSetter.swift in Sources */,
+				EFD717C52A24DB6100E5430D /* CashAddress.swift in Sources */,
 				5D6B6F7C257A539A00161EAF /* Script.swift in Sources */,
 				5D6B6F84257A539A00161EAF /* MutableTransaction.swift in Sources */,
 				5D6B6F9A257A539A00161EAF /* Base58AddressConverter.swift in Sources */,

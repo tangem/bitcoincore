@@ -75,7 +75,7 @@ extension BCBitcoinCore {
         try transactionCreator.createRawTransaction(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, signatures: signatures, changeScript: changeScript, sequence: sequence, pluginData: pluginData)
     }
     
-    public func createRawHashesToSign(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData] = [:]) throws -> [Data] {
+    public func createRawHashesToSign(to address: String, value: Int, feeRate: Int, sortType: TransactionDataSortType, changeScript: Data?, sequence: Int, pluginData: [UInt8: IPluginData] = [:]) throws -> [HashForSign] {
         try transactionCreator.createRawHashesToSign(to: address, value: value, feeRate: feeRate, senderPay: true, sortType: sortType, changeScript: changeScript, sequence: sequence, pluginData: pluginData)
     }
 

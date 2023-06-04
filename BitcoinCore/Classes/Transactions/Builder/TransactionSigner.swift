@@ -67,17 +67,16 @@ extension TransactionSigner: ITransactionSigner {
         }
     }
 
-    func hashesToSign(mutableTransaction: MutableTransaction) throws -> [Data] {
-        var hashes = [Data]()
-        for index in mutableTransaction.inputsToSign.indices {
+    func hashesToSign(mutableTransaction: MutableTransaction) throws -> [HashForSign] {
+        try mutableTransaction.inputsToSign.enumerated().map { (index, input) in
             let hash = try inputSigner.sigScriptHashToSign (
                 transaction: mutableTransaction.transaction,
                 inputsToSign: mutableTransaction.inputsToSign,
                 outputs: mutableTransaction.outputs,
                 index: index
             )
-            hashes.append(hash)
+            
+            return HashForSign(hash: hash, publicKey: input.previousOutputPublicKey)
         }
-        return hashes
     }
 }

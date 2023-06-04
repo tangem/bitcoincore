@@ -92,7 +92,7 @@ public class BitcoinManager {
         kit.setUnspents(utxos)
     }
     
-    public func buildForSign(target: String, amount: Decimal, feeRate: Int, sortType: TransactionDataSortType = .bip69, changeScript: Data?, sequence: Int? = nil) throws -> [Data] {
+    public func buildForSign(target: String, amount: Decimal, feeRate: Int, sortType: TransactionDataSortType = .bip69, changeScript: Data?, sequence: Int? = nil) throws -> [HashForSign] {
         let amount = convertToSatoshi(value: amount)
         return try kit.createRawHashesToSign(to: target, value: amount, feeRate: feeRate, sortType: sortType, changeScript: changeScript, sequence: sequence ?? 0)
     }
