@@ -73,6 +73,9 @@ public struct Base58 {
         }
 
         let size = string.lengthOfBytes(using: .utf8) * 733 / 1000 + 1 - zerosCount
+        
+        guard size >= 0 else { return Data() }
+        
         var base58: [UInt8] = Array(repeating: 0, count: size)
         for c in string where c != " " {
             // search for base58 character
