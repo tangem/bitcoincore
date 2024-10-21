@@ -1,3 +1,5 @@
+import Foundation
+
 public enum SequenceValues: Int {
     case `default` = 0x0
     case replacedByFeeMaxValue = 0xFFFFFFFD

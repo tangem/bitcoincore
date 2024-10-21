@@ -1,3 +1,5 @@
+import Foundation
+
 class TransactionBuilder {
     private let recipientSetter: IRecipientSetter
     private let inputSetter: IInputSetter

@@ -1,3 +1,5 @@
+import Foundation
+
 public class DustCalculator {
 
     private let minFeeRate: Int

@@ -1,3 +1,5 @@
+import Foundation
+
 class RestoreKeyConverterChain : IRestoreKeyConverter {
 
     var converters = [IRestoreKeyConverter]()

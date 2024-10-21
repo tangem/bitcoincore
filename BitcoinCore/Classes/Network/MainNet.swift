@@ -1,6 +1,7 @@
+import Foundation
 //import BitcoinCore
 
- class MainNet: INetwork {
+class MainNet: INetwork {
     let pubKeyHash: UInt8 = 0x00
     let privateKey: UInt8 = 0x80
     let scriptHash: UInt8 = 0x05

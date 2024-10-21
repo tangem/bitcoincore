@@ -1,3 +1,5 @@
+import Foundation
+
 class TransactionCreator {
     enum CreationError: Error {
         case transactionAlreadyExists

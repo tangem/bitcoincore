@@ -1,3 +1,5 @@
+import Foundation
+
 class Bip69Sorter: ITransactionDataSorter {
 
     func sort(outputs: [Output]) -> [Output] {

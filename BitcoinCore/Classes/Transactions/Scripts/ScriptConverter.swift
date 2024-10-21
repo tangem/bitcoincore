@@ -1,3 +1,4 @@
+import Foundation
 
 enum ScriptError: Error { case wrongScriptLength, wrongSequence, unexpectedScriptType }
 

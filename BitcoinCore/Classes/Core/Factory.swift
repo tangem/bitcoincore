@@ -1,3 +1,4 @@
+import Foundation
 
 class Factory: IFactory {
     init() {}

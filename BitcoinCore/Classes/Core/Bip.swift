@@ -1,3 +1,4 @@
+import Foundation
 //import HdWalletKit
 
 public enum Bip: CustomStringConvertible {

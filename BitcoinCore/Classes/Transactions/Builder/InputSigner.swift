@@ -1,3 +1,4 @@
+import Foundation
 
 class InputSigner {
     enum SignError: Error {
