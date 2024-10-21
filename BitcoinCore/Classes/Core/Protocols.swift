@@ -29,7 +29,7 @@ public protocol IHasher {
     func hash(data: Data) -> Data
 }
 
-protocol IInitialSyncerDelegate: class {
+protocol IInitialSyncerDelegate: AnyObject {
     func onSyncSuccess()
     func onSyncFailed(error: Error)
 }
@@ -48,7 +48,7 @@ public protocol IScriptConverter {
     func decode(data: Data) throws -> Script
 }
 
-protocol IScriptExtractor: class {
+protocol IScriptExtractor: AnyObject {
     var type: ScriptType { get }
     func extract(from data: Data, converter: IScriptConverter) throws -> Data?
 }
@@ -61,7 +61,7 @@ protocol ITransactionPublicKeySetter {
     func set(output: Output) -> Bool
 }
 
-public protocol ITransactionSyncer: class {
+public protocol ITransactionSyncer: AnyObject {
     func newTransactions() -> [FullTransaction]
     func handleRelayed(transactions: [FullTransaction])
     func handleInvalid(fullTransaction: FullTransaction)
@@ -114,7 +114,7 @@ public protocol IUnspentOutputsSetter {
 }
 
 
-public protocol INetwork: class {
+public protocol INetwork: AnyObject {
     var pubKeyHash: UInt8 { get }
     var privateKey: UInt8 { get }
     var scriptHash: UInt8 { get }

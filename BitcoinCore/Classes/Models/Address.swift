@@ -2,7 +2,7 @@ import Foundation
 
 public enum AddressType: UInt8 { case pubKeyHash = 0, scriptHash = 8 }
 
-public protocol Address: class {
+public protocol Address: AnyObject {
     var type: AddressType { get }
     var scriptType: ScriptType { get }
     var keyHash: Data { get }
