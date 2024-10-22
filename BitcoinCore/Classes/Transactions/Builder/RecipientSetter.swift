@@ -1,3 +1,5 @@
+import Foundation
+
 class RecipientSetter {
     private let addressConverter: IAddressConverter
     private let pluginManager: IPluginManager

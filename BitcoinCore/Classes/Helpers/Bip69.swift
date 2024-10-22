@@ -1,3 +1,5 @@
+import Foundation
+
 class Bip69 {
 
     static var outputComparator: ((Output, Output) -> Bool) = { o, o1 in

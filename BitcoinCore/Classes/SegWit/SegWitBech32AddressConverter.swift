@@ -1,3 +1,5 @@
+import Foundation
+
 public class SegWitBech32AddressConverter: IAddressConverter {
     private let prefix: String
     private let scriptConverter: IScriptConverter

@@ -1,3 +1,5 @@
+import Foundation
+
 class TransactionOutputExtractor {
     let pluginManager: IPluginManager
 

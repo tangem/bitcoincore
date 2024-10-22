@@ -1,3 +1,5 @@
+import Foundation
+
 class TransactionSigner {
     enum SignError: Error {
         case notSupportedScriptType

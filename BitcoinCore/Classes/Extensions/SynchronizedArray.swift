@@ -1,3 +1,5 @@
+import Foundation
+
 /// A thread-safe array.
 public class SynchronizedArray<Element> {
     fileprivate let queue = DispatchQueue(label: "io.SynchronizedArray", attributes: .concurrent)

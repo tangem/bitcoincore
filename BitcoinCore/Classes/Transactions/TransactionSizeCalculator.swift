@@ -1,3 +1,5 @@
+import Foundation
+
 public class TransactionSizeCalculator {
     static let legacyTx = 16 + 4 + 4 + 16          //40 Version + number of inputs + number of outputs + locktime
     static let legacyWitnessData = 1               //1 Only 0x00 for legacy input

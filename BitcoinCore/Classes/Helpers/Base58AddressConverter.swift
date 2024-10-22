@@ -1,3 +1,4 @@
+import Foundation
 
 public class Base58AddressConverter: IAddressConverter {
     private static let checkSumLength = 4

@@ -1,3 +1,5 @@
+import Foundation
+
 class OutputSetter {
     private let outputSorterFactory: ITransactionDataSorterFactory
     private let factory: IFactory

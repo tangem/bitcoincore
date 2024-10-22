@@ -1,3 +1,5 @@
+import Foundation
+
 public class SegWitAddress: Address, Equatable {
     public let type: AddressType
     public let keyHash: Data

@@ -1,3 +1,5 @@
+import Foundation
+
 public class CashBech32AddressConverter: IAddressConverter {
     private let prefix: String
 

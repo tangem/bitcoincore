@@ -1,3 +1,5 @@
+import Foundation
+
 public class AddressConverterChain: IAddressConverter {
     private var concreteConverters = [IAddressConverter]()
 

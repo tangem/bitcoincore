@@ -1,3 +1,5 @@
+import Foundation
+
 class UnspentOutputSelectorChain: IUnspentOutputSelector {
     var concreteSelectors = [IUnspentOutputSelector]()
 
