@@ -13,7 +13,7 @@ import Foundation
 
 /// Segregated Witness Address encoder/decoder
 public class SegWitBech32 {
-    private static let bech32 = Bech32()
+    static public let bech32 = Bech32()
     
     /// Convert from one power-of-2 number base to another
     private static func convertBits(from: Int, to: Int, pad: Bool, idata: Data) throws -> Data {
@@ -41,7 +41,7 @@ public class SegWitBech32 {
     }
     
     /// Decode segwit address
-    public static func decode(hrp: String, addr: String) throws -> (version: UInt8, program: Data) {
+    public static func decode(bech32: Bech32 = bech32, hrp: String, addr: String) throws -> (version: UInt8, program: Data) {
         let dec = try bech32.decode(addr)
         guard dec.hrp == hrp else {
             throw CoderError.hrpMismatch(dec.hrp, hrp)
