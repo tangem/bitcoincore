@@ -28,10 +28,10 @@ public class TaprootAddressConverter: IAddressConverter {
     }
 
     public func convert(keyHash: Data, type: ScriptType) throws -> Address {
-        fatalError("not implemented")
+        throw BitcoinCoreErrors.Unexpected.unknown
     }
 
     public func convert(publicKey: PublicKey, type: ScriptType) throws -> Address {
-        fatalError("not implemented")
+        throw BitcoinCoreErrors.Unexpected.unknown
     }
 }
