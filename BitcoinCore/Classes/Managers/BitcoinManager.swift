@@ -36,9 +36,9 @@ public class BitcoinManager {
             .set(paymentAddressParser: paymentAddressParser)
             .build()
     
+        bitcoinCore.prepend(addressConverter: taprootAddressConverter)
         bitcoinCore.prepend(addressConverter: bech32AddressConverter)
         bitcoinCore.prepend(addressConverter: bech32CashAddr)
-        bitcoinCore.prepend(addressConverter: taprootAddressConverter)
         
         switch bip {
         case .bip44:
